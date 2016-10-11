@@ -50,7 +50,7 @@ class Sleep(Effect):
         self.start_position = start_position
 
     def expire(self, game, player):
-        game.players.remove(self.spirit)
+        game.players.remove(player.spirit)
         self._expire(player)
         player.active = True
         game.log("Вот что на самом деле лежит в вашей сумке: {}".format(player.inventory))
@@ -58,28 +58,30 @@ class Sleep(Effect):
     def event(self, game, player, event):
         super(Sleep, self).event(game, player, event)
         if event == "start":
-            self.spirit = deepcopy(player)
-            self.spirit.effects.pop() #remove this effect
-            self.spirit.position = self.start_position
-            self.spirit.add_effect(game, Dream(self.time, self, player))
-            game.players.insert(game.current_player, self.spirit)
+            player.spirit = deepcopy(player)
+            player.sleep = self
+            player.spirit.effects.pop() #remove this effect
+            player.spirit.position = self.start_position
+            player.spirit.add_effect(game, Dream(self.time, player))
+            game.players.insert(game.current_player, player.spirit)
             player.active = False
         elif event == "die":
             self.expire(game, player)
             return False
 
 class Dream(ExpiringEffect):
-    def __init__(self, time, sleep_effect, body):
+    def __init__(self, time, body):
         self.time = time
-        self.sleep_effect = sleep_effect
         self.body = body
 
     def expire(self, game, player):
         game.log(player, "Вы проснулись")
-        self.sleep_effect.expire(game, self.body)
+        player.body.sleep.expire(game, player.body)
 
     def event(self, game, player, event):
         super(Dream, self).event(game, player, event)
+        if event == "start":
+            player.body = self.body
         if event == "win":
             game.log("Какой приятный был сон!")
             self.expire(game, player)
