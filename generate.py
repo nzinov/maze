@@ -9,6 +9,7 @@ VWALL = ":"
 HWALL = "."
 ROOM = " "
 CROSS = "+"
+print('"""')
 n = list(map(int, argv[1:]))
 print(len(n))
 for el in n:
@@ -17,3 +18,4 @@ for el in n:
         print((ROOM + VWALL) * (el - 1) + ROOM)
         print((HWALL + CROSS) * (el - 1) + HWALL)
     print((ROOM + VWALL) * (el - 1) + ROOM)
+print('"""')

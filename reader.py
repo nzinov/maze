@@ -1,9 +1,10 @@
 from collections import defaultdict
 from squares import *
 from effects import *
+from objects import *
 from game import Subfield, Field
 from position import Position
-import importlib
+import io
 LEFT = (0, -1)
 RIGHT = (0, 1)
 UP = (-1, 0)
@@ -11,7 +12,15 @@ DOWN = (1, 0)
 
 
 def read_field(fname):
-    f = open(fname)
+    # solution from http://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
+    import importlib.util
+    print(fname)
+    spec = importlib.util.spec_from_file_location("custom", fname)
+    custom = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(custom)
+    for name, obj in custom.__dict__.items():
+        globals()[name] = obj
+    f = io.StringIO(custom.__doc__)
     subfield_number = int(f.readline())
     field = Field([])
     keys = defaultdict(lambda: [])

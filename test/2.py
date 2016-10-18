@@ -1,4 +1,4 @@
-2
+"""2
 3
 ..S.E
 ...._
@@ -15,3 +15,4 @@ S EffectorSquare(lambda: Stun(2), "Вы попали в ловушку")
 Z EffectorSquare(lambda: Sleep(3, Position(1, 0, 0)))
 A Armory()
 R RubberRoom(RIGHT)
+"""
