@@ -7,7 +7,7 @@ run = 0
 os.chdir("test/")
 for test_file in os.listdir(path='.'):
     if test_file.endswith(".test"):
-        print("Running $file")
+        print("Running {}".format(test_file))
         run += 1
         if not run_test(test_file):
             failed += 1
