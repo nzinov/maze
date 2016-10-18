@@ -9,7 +9,7 @@ VWALL = ":"
 HWALL = "."
 ROOM = " "
 CROSS = "+"
-print('"""')
+print('"""', end="")
 n = list(map(int, argv[1:]))
 print(len(n))
 for el in n:
