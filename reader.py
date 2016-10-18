@@ -41,4 +41,10 @@ def read_field(fname):
         symbol = row[0]
         for pos in keys[symbol]:
             field.fields[pos.field].squares[pos.x()][pos.y()] = eval(row[1:])
+    descr = f.readline()
+    if descr == "":
+        descr = None
+    else:
+        descr = descr[:-1]
+    field.description = descr
     return field

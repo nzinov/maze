@@ -60,6 +60,7 @@ class TelegramController:
             'Чтобы присоединиться, напишите мне в личку "/go {} <имя> <начальная позиция>"'.format(self.chat_id))
         self.log(
             "Маленькие английские буквы по горизонтали, цифры с нуля по вертикали")
+        self.log(self.field.description)
 
     def add(self, update, pid, name, pos):
         if not self.accept_players:

@@ -35,8 +35,9 @@ class Subfield:
 
 class Field:
 
-    def __init__(self, fields):
+    def __init__(self, fields, description=None):
         self.fields = fields
+        self.description = description
 
     def is_legal(self, position):
         return (0 <= position.field < len(self.fields) and
