@@ -1,15 +1,18 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from settings import TOKEN
+from position import Position
 from game import Game, GameEnded
 from reader import read_field
 from player import Player
-from random import shuffle
+from random import shuffle, randint
 import dill as pickle
 from emoji import emojize
+import linecache
 
 
 class TelegramController:
     instances = {}
+    chat_codes = {}
 
     @classmethod
     def wait(cls):
@@ -36,13 +39,15 @@ class TelegramController:
 
     @staticmethod
     def go(bot, update):
-        _, chat_id, name, pos = update.message.text.split()
+        _, chat_code, pos = update.message.text.split()
         pid = update.message.from_user.id
-        chat_id = int(chat_id)
-        if not chat_id in TelegramController.instances:
-            update.message.reply_text("Недопустимый номер игры")
+        name = "@"+update.message.from_user.username
+        print(chat_code)
+        print(TelegramController.chat_codes)
+        if not chat_code in TelegramController.chat_codes:
+            update.message.reply_text("Нет такой игры")
             return
-        TelegramController.instances[chat_id].add(update, pid, name, pos)
+        TelegramController.chat_codes[chat_code].add(update, pid, name, pos)
 
     def __init__(self, bot, chat_id, fname):
         self.bot = bot
@@ -53,14 +58,18 @@ class TelegramController:
         self.game = None
 
     def start(self):
+        rand_id = randint(0, 10000)
+        word = linecache.getline("word_dict.txt", rand_id)[:-1]
+        TelegramController.chat_codes[word] = self
         self.log("Начинается игра!")
         self.log("Поле имеет размеры {0}x{0}".format(
             self.field.fields[0].size))
         self.log(
-            'Чтобы присоединиться, напишите мне в личку "/go {} <имя> <начальная позиция>"'.format(self.chat_id))
+            'Чтобы присоединиться, напишите мне в личку "/go {} <начальная позиция>"'.format(word))
         self.log(
-            "Маленькие английские буквы по горизонтали, цифры с нуля по вертикали")
-        self.log(self.field.description)
+            "Маленькие английские буквы по горизонтали, цифры с нуля по вертикали. Например, 'a3'")
+        if self.field.description:
+            self.log(self.field.description)
 
     def add(self, update, pid, name, pos):
         if not self.accept_players:
