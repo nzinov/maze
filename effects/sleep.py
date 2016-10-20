@@ -37,6 +37,9 @@ class Dream(ExpiringEffect):
         self.time = time
         self.body = body
 
+    def wake(self):
+        self.time = 0
+
     def expire(self, game, player):
         game.log(player, "Вы проснулись")
         player.body.sleep.expire(game, player.body)
@@ -47,9 +50,9 @@ class Dream(ExpiringEffect):
             player.body = self.body
         if event == "win":
             game.log("Какой приятный был сон!")
-            self.expire(game, player)
+            self.wake()
             return True
         elif event == "die":
             game.log("Кошмар. Ну и приснится же такое!")
-            self.expire(game, player)
+            self.wake()
             return True

@@ -10,6 +10,7 @@ class Player:
         self.inventory = Inventory()
         self.name = name
         self.active = True
+        self.pid = None
 
     def event(self, game, event):
         """
@@ -35,14 +36,17 @@ class Player:
             prevent_default = True
         return prevent_default
 
-    def die(self, game):
-        if self.event(game, "die"):
-            return
+    def _die(self, game):
         game.log(self, "Вы умерли")
         game.field[self.position].loot.update(self.inventory)
         self.inventory = Inventory()
         self.position = self.start_position
         self.effects = []
+
+    def die(self, game):
+        if self.event(game, "die"):
+            return
+        self._die(game)
 
     def add_effect(self, game, effect):
         self.effects.append(effect)

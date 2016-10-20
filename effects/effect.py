@@ -25,6 +25,6 @@ class ExpiringEffect(Effect):
     def event(self, game, player, event):
         if event == "move":
             self.time -= 1
-            if self.time == 0:
+            if self.time <= 0:
                 self.expire(game, player)
                 self._expire(player)
