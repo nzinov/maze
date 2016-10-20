@@ -45,11 +45,21 @@ def read_field(fname):
                     hwalls[x][y] = row[2 * y] == "="
         field.fields.append(
             Subfield(size, squares, vwalls=vwalls, hwalls=hwalls))
-    for j in range(len(keys)):
+    while True:
         row = f.readline()
+        if not row:
+            break
         symbol = row[0]
+        if not keys[symbol]:
+            print("Warning: '{}' is never used".format(symbol))
         for pos in keys[symbol]:
-            field.fields[pos.field].squares[pos.x()][pos.y()] = eval(row[1:])
+            square = eval(row[1:])
+            if not isinstance(square, Square):
+                print("Warning: got {} not Square for symbol '{}'".format(type(square), symbol))
+            field.fields[pos.field].squares[pos.x()][pos.y()] = square
+        del keys[symbol]
+    if keys:
+        print("Warning, undefined symbols: ", ", ".join(keys.keys()))
     descr = f.readline()
     if descr == "":
         descr = None
