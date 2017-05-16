@@ -19,8 +19,10 @@ class Subfield:
 
     def can_move(self, position, direction):
         if not self.is_legal(position + direction):
+            print("Not legal")
             return False
         elif direction[0] == 0:
+            print("Bad")
             return not self.vert_walls[position.x()][position.y() + min(0, direction[1])]
         else:
             return not self.hor_walls[position.x() + min(0, direction[0])][position.y()]
@@ -138,7 +140,7 @@ class Game:
         raise GameEnded()
 
     def __getstate__(self):
-        return (self.field, self.players, self.current_player)
+        return (self.field, self.players, self.current_player, self.turn_number)
 
     def __setstate__(self, state):
-        self.field, self.players, self.current_player = state
+        self.field, self.players, self.current_player, self.turn_number = state

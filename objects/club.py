@@ -4,7 +4,7 @@ from constants import DIRECTIONS
 
 @register_object("дубина")
 class Club(Object):
-    "в/н/л/п - ударить в заданую сторону"
+    "Такой суковатой дубиной кого угодно с места сшибешь. в/н/л/п - ударить в заданую сторону"
     @staticmethod
     def action(game, player, action):
         if action in DIRECTIONS:
