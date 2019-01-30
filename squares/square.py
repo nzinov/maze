@@ -18,3 +18,8 @@ class Square:
                 self.loot = Inventory()
             if self.message:
                 game.log(self.message)
+
+class Minotaur(Square):
+    def arrive(self, game, player):
+        game.log("Вы попались МИНОТАВРУ. Жуткий конец.")
+        player.die(game)
