@@ -12,8 +12,8 @@ for test_file in os.listdir(path='.'):
         run += 1
         if not run_test(test_file):
             failed += 1
-os.chdir("..")
-for field in os.listdir(path='game_archive/'):
+os.chdir("../game_archive/")
+for field in os.listdir(path='.'):
     if field.endswith(".py"):
         print("Loading {}".format(field))
         read_field(field)
