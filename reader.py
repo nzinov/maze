@@ -2,6 +2,7 @@ from collections import defaultdict
 from squares import *
 from effects import *
 from objects import *
+from custom import *
 from game import Subfield, Field
 from position import Position
 import io
