@@ -84,10 +84,6 @@ class Bottle(Object):
             game.log("Раздался страшный треск, из бытылки пошел дым и появился джин.")
             game.log("БЛАГОДАРЮ ТЕБЯ, ОСВОБОДИВШЕГО МЕНЯ ИЗ ЗАТОЧЕНИЯ")
             game.log("Я ПОЙДУ, КУДА ТЫ ПРИКАЖЕШЬ И СОКРУШУ ЛЮБЫЕ СТЕНЫ СВОИМ ЯТАГАНОМ")
-            game.log("ТВОИ ВРАГИ ОНЕМЕЮТ ОТ СТРАХА ЕДВА ЗАВИДЯ МЕНЯ")
-            for other in game.players:
-                if not isinstance(other, Geanie):
-                    other.add_effect(game, FeelMyPower())
             game.players.append(Geanie(player))
             return True
 
