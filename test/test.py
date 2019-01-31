@@ -34,6 +34,8 @@ class Controller:
         try:
             while True:
                 action = self.test_file.readline()[:-1]
+                if not action:
+                    break
                 if action[:3] != ">>>":
                     print("Expected action got {}".format(action))
                     return False

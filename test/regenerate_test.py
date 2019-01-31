@@ -34,19 +34,18 @@ class Controller:
         try:
             while True:
                 action = self.test_file.readline()[:-1]
-                if action[:3] != ">>>":
-                    print("Expected action got {}".format(action))
-                    exit(1)
-                print(action, file=self.output)
-                action = action[3:]
-                self.game.action(action)
+                if not action:
+                    break
+                if action[:3] == ">>>":
+                    print(action, file=self.output)
+                    action = action[3:]
+                    self.game.action(action)
         except GameEnded:
             pass
         print("Successfuly regenerated!")
         self.output.close()
 
     def log(self, message):
-        answer = self.test_file.readline()[:-1]
         print(message, file=self.output)
 
 
