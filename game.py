@@ -108,6 +108,7 @@ class Game:
 
     def action(self, action):
         done = False
+        action = action.lower()
         if action in DIRECTIONS:
             self.field.move(self, DIRECTIONS[action])
             done = True
