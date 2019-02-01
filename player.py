@@ -2,6 +2,7 @@ from inventory import Inventory
 
 
 class Player:
+    MAX_HEALTH = 100
 
     def __init__(self, name, position):
         self.start_position = position
@@ -11,6 +12,7 @@ class Player:
         self.name = name
         self.active = True
         self.pid = None
+        self._health = self.MAX_HEALTH
 
     def event(self, game, event):
         """
@@ -42,6 +44,7 @@ class Player:
         self.inventory = Inventory()
         self.position = self.start_position
         self.effects = []
+        self._health = self.MAX_HEALTH
 
     def die(self, game):
         if self.event(game, "die"):
@@ -57,3 +60,11 @@ class Player:
 
     def name_as_hashtag(self):
         return "#" + self.name
+
+    @property
+    def health(self):
+        return self._health
+
+    @health.setter
+    def health(self, value):
+        self._health = min(self.MAX_HEALTH, value)

@@ -11,13 +11,15 @@ class Bullet(Object):
             position = player.position
             direction = DIRECTIONS[action]
             while True:
-                killed = False
+                hit = False
                 for other in game.players:
                     if other.position == position and player.name != other.name:
+                        hit = True
+                        other.health -= 40
+                        if other.health <= 0:
+                            other.die(game)
                         game.log("Вы попали в игрока {}".format(other.name))
-                        other.die(game)
-                        killed = True
-                if killed:
+                if hit:
                     return True
                 if game.field.can_move(position, direction):
                     position += direction

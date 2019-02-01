@@ -1,3 +1,5 @@
+import random
+
 from .effect import Effect, ExpiringEffect
 from copy import deepcopy
 from inventory import Inventory
@@ -13,6 +15,9 @@ class Sleep(Effect):
         game.players.remove(player.spirit)
         self._expire(player)
         player.active = True
+        health_addition = random.choice([-5, 0, 5, 10, 15, 20])
+        player.health += health_addition
+
         game.log("Вот что на самом деле лежит в вашей сумке: {}".format(
             player.inventory))
 
@@ -21,7 +26,7 @@ class Sleep(Effect):
         if event == "start":
             player.spirit = deepcopy(player)
             player.sleep = self
-            player.spirit.effects.pop() #remove this effect
+            player.spirit.effects.pop()  # remove this effect
             player.spirit.position = self.start_position
             player.spirit.add_effect(game, Dream(self.time, player))
             game.players.insert(game.current_player, player.spirit)
