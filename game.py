@@ -63,7 +63,7 @@ class Field:
         if result:
             game.log(game.player(), "Вы сходили {}".format(NAME[direction]))
         else:
-            game.player().health -= 5
+            game.player().change_health(game, -5)
             game.log(game.player(), "Невозможно сходить {}. Там стена :no_entry:".format(
                 NAME[direction]))
 
@@ -93,10 +93,8 @@ class Game:
 
     def next_move(self):
         while True:
-            if self.player().health <= 0:
-                self.player().die(self)
-            else:
-                self.player().health += 1
+            if self.player().active:
+                self.player().change_health(self, 1)
             self.current_player = (self.current_player + 1) % len(self.players)
             if self.current_player == 0:
                 for player in self.players:
@@ -129,12 +127,9 @@ class Game:
 помощь - эта справка
 помощь <предмет> - справка по предмету
 <предмет> <действие> - использовать специальное действие предмета
-состояние - узнать сколько осталось здоровья
                         """)
         elif action == "инвентарь":
             self.log("Содержимое сумки: {}".format(self.player().inventory))
-        elif action == "состояние":
-            self.log("Осталось {} здоровья".format(self.player().health))
         elif action.split()[0] in self.player().inventory:
             done = self.player().inventory.action(self, self.player(), action)
         if done:

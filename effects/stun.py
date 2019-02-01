@@ -13,5 +13,7 @@ class Stun(Effect):
             if self.time == 0:
                 self._expire(player)
             game.next_move()
+        elif event == "start":
+            player.change_health(game, -10)
         else:
             super(Stun, self).event(game, player, event)

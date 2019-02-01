@@ -65,6 +65,14 @@ class Player:
     def health(self):
         return self._health
 
-    @health.setter
-    def health(self, value):
-        self._health = min(self.MAX_HEALTH, value)
+    def change_health(self, game, health_delta):
+        old_health = self._health
+        self._health = min(self.MAX_HEALTH, self._health + health_delta)
+        if self._health <= 0:
+            self.die(game)
+        elif old_health != self._health:
+            if health_delta > 0:
+                health_delta_str = ":green_heart: +" + str(health_delta)
+            else:
+                health_delta_str = ":heart: " + str(health_delta)
+            game.log(str(self) + ": " + health_delta_str)

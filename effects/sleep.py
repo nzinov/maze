@@ -15,8 +15,6 @@ class Sleep(Effect):
         game.players.remove(player.spirit)
         self._expire(player)
         player.active = True
-        health_addition = random.choice([-5, 0, 5, 10, 15, 20])
-        player.health += health_addition
 
         game.log("Вот что на самом деле лежит в вашей сумке: {}".format(
             player.inventory))
