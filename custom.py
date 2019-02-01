@@ -20,6 +20,7 @@ class FeelMyPower(Effect):
         return False
 
 class Geanie(Player):
+    MAX_HEALTH = 40
 
     def __init__(self, master):
         super(Geanie, self).__init__("Джин ибн {}".format(master.name), master.position)
@@ -84,7 +85,7 @@ class Bottle(Object):
             game.log("Раздался страшный треск, из бытылки пошел дым и появился джин.")
             game.log("БЛАГОДАРЮ ТЕБЯ, ОСВОБОДИВШЕГО МЕНЯ ИЗ ЗАТОЧЕНИЯ")
             game.log("Я ПОЙДУ, КУДА ТЫ ПРИКАЖЕШЬ И СОКРУШУ ЛЮБЫЕ СТЕНЫ СВОИМ ЯТАГАНОМ")
-            game.players.append(Geanie(player))
+            game.players.insert(game.players.index(player), Geanie(player))
             return True
 
 @register_object("зачарованная_бутылка")

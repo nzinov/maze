@@ -63,9 +63,9 @@ class Field:
         if result:
             game.log(game.player(), "Вы сходили {}".format(NAME[direction]))
         else:
-            game.player().change_health(game, -5)
             game.log(game.player(), "Невозможно сходить {}. Там стена :no_entry:".format(
                 NAME[direction]))
+            game.player().change_health(game, -5)
 
     def __getitem__(self, position):
         return self.fields[position.field][position]
