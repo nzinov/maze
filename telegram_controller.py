@@ -41,10 +41,10 @@ class TelegramController:
     def go(bot, update):
         _, chat_code, pos = update.message.text.split()
         pid = update.message.from_user.id
-        name = "@"+update.message.from_user.username
+        name = update.message.from_user.username
         print(chat_code)
         print(TelegramController.chat_codes)
-        if not chat_code in TelegramController.chat_codes:
+        if chat_code not in TelegramController.chat_codes:
             update.message.reply_text("Нет такой игры")
             return
         TelegramController.chat_codes[chat_code].add(update, pid, name, pos)
@@ -83,10 +83,11 @@ class TelegramController:
         except ValueError:
             update.message.reply_text("Недопустимая позиция")
         else:
-            self.players.append(Player(name, pos))
-            self.players[-1].pid = pid
+            player = Player(name, pos)
+            self.players.append(player)
+            player.pid = pid
             update.message.reply_text("Отлично")
-            self.log("Присоединился игрок {}".format(name))
+            self.log("Присоединился игрок {}".format(player))
 
     @staticmethod
     def ready(bot, update):

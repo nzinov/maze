@@ -53,4 +53,7 @@ class Player:
         self.effects[-1].event(game, self, "start")
 
     def __str__(self):
-        return self.name
+        return "@" + self.name
+
+    def name_as_hashtag(self):
+        return "#" + self.name

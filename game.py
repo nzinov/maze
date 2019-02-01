@@ -84,7 +84,7 @@ class Game:
         if message is None:
             message = player
         else:
-            message = "{}: {}".format(player, message)
+            message = "{}: {}".format(player.name_as_hashtag(), message)
         self.controller.log(message)
 
     def player(self):
@@ -112,7 +112,7 @@ class Game:
             action = action.split()
             if len(action) > 1:
                 obj = action[1]
-                if not obj in self.player().inventory:
+                if obj not in self.player().inventory:
                     self.log("У вас нет такого предмета")
                 else:
                     self.log(OBJECTS[obj].__doc__)
