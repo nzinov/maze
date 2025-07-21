@@ -12,7 +12,8 @@ class Sleep(Effect):
         self.start_position = start_position
 
     def expire(self, game, player):
-        game.players.remove(player.spirit)
+        game.players.replace_player(player.spirit, player)
+        game.players.remove_player(player.spirit)
         self._expire(player)
         player.active = True
 
@@ -27,7 +28,7 @@ class Sleep(Effect):
             player.spirit.effects.pop()  # remove this effect
             player.spirit.position = self.start_position
             player.spirit.add_effect(game, Dream(self.time, player))
-            game.players.insert(game.current_player, player.spirit)
+            game.players.replace_player(player, player.spirit)
             player.active = False
         elif event == "die":
             self.expire(game, player)

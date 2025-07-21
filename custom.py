@@ -19,6 +19,7 @@ class FeelMyPower(Effect):
                     game.next_move()
         return False
 
+
 class Geanie(Player):
     MAX_HEALTH = 40
 
@@ -32,8 +33,7 @@ class Geanie(Player):
     def disappear(self, game):
         game.log(self, "Я ХОРОШО ПОСЛУЖИЛ ТЕБЕ, ПОВЕЛИТЕЛЬ. прощай...")
         self._die(game)
-        game.players.remove(self)
-
+        game.players.remove_player(self)
 
     def event(self, game, event):
         if event == "before_move":
@@ -85,8 +85,9 @@ class Bottle(Object):
             game.log("Раздался страшный треск, из бытылки пошел дым и появился джин.")
             game.log("БЛАГОДАРЮ ТЕБЯ, ОСВОБОДИВШЕГО МЕНЯ ИЗ ЗАТОЧЕНИЯ")
             game.log("Я ПОЙДУ, КУДА ТЫ ПРИКАЖЕШЬ И СОКРУШУ ЛЮБЫЕ СТЕНЫ СВОИМ ЯТАГАНОМ")
-            game.players.insert(game.players.index(player), Geanie(player))
+            game.players.add_player(Geanie(player))
             return True
+
 
 @register_object("зачарованная_бутылка")
 class CharmedBottle(Object):

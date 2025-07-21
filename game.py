@@ -71,13 +71,81 @@ class Field:
         return self.fields[position.field][position]
 
 
+class Players:
+    def __init__(self, players, current_ind=-1):
+        self._players = players
+        self._hidden_players = []
+        self._current_ind = current_ind
+        self._delete_current_on_rotate = False
+
+    @property
+    def current_player(self):
+        return self._players[self._current_ind]
+
+    def rotate(self):
+        if self._delete_current_on_rotate:
+            self._players.remove(self._current_ind)
+            self._delete_current_on_rotate = False
+        else:
+            self._current_ind += 1
+        self._current_ind = self._current_ind % len(self._players)
+        return self._current_ind == 0
+
+    def replace_player(self, base, replacement):
+        ind = self._players.index(base)
+        assert replacement not in self._players
+        self._players[ind] = replacement
+        try:
+            self._hidden_players.remove(replacement)
+        except ValueError:
+            pass
+        self._hidden_players.append(base)
+        base.active = False
+
+    def add_player(self, new_player):
+        self._players.insert(self._current_ind, new_player)
+        self._current_ind += 1
+
+    def remove_player(self, player, pass_turn_to_if_current=None):
+        try:
+            ind = self._players.index(player)
+        except ValueError:
+            self._hidden_players.remove(player)
+            return
+        if ind == self._current_ind:
+            if pass_turn_to_if_current is None:
+                player.active = False
+                self._delete_current_on_rotate = True
+            else:
+                self._players.remove(player)
+                pass_turn_to_ind = self._players.index(pass_turn_to_if_current)
+                assert self._current_ind != pass_turn_to_ind
+                self._current_ind = pass_turn_to_ind
+        else:
+            if ind < self._current_ind:
+                self._current_ind -= 1
+            self._players.remove(player)
+
+    def __iter__(self):
+        all_players = self._players + self._hidden_players
+        if self._delete_current_on_rotate:
+            return (player for ind, player in enumerate(all_players) if ind != self._current_ind)
+        else:
+            return iter(all_players)
+
+    def __getstate__(self):
+        return (self._players, self._hidden_players, self._current_ind, self._delete_current_on_rotate)
+
+    def __setstate__(self, state):
+        self._players, self._hidden_players, self._current_ind, self._delete_current_on_rotate = state
+
+
 class Game:
 
     def __init__(self, controller, field, players):
         self.controller = controller
         self.field = field
-        self.players = players
-        self.current_player = -1
+        self.players = Players(players)
         self.turn_number = 0
         self.next_move()
 
@@ -89,14 +157,15 @@ class Game:
         self.controller.log(message)
 
     def player(self):
-        return self.players[self.current_player]
+        return self.players.current_player
 
     def next_move(self):
         while True:
             if self.player().active:
                 self.player().change_health(self, 1)
-            self.current_player = (self.current_player + 1) % len(self.players)
-            if self.current_player == 0:
+
+            new_round = self.players.rotate()
+            if new_round:
                 for player in self.players:
                     player.event(self, "start_turn")
                 self.turn_number += 1
@@ -144,7 +213,7 @@ class Game:
         raise GameEnded()
 
     def __getstate__(self):
-        return (self.field, self.players, self.current_player, self.turn_number)
+        return (self.field, self.players.get_state(), self.turn_number)
 
     def __setstate__(self, state):
-        self.field, self.players, self.current_player, self.turn_number = state
+        self.field, self.players, self.turn_number = state
