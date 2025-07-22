@@ -20,7 +20,10 @@ class TestFailed(Exception):
 class Controller:
 
     def __init__(self, test_file):
-        self.test_file = open(test_file, "r")
+        self.path = test_file
+
+    def __enter__(self):
+        self.test_file = open(self.path, "r")
         field_file = self.test_file.readline()[:-1]
         field = read_field(field_file)
         player_number = int(self.test_file.readline())
@@ -29,6 +32,7 @@ class Controller:
             players.append(Player(str(i), Position(
                 *map(int, self.test_file.readline().split()))))
         self.game = Game(self, field, players)
+        return self
 
     def test(self):
         try:
@@ -48,15 +52,20 @@ class Controller:
         print("OK!")
         return True
 
+    def __exit__(self, type_, value, traceback):
+        self.test_file.close()
+
     def log(self, message):
         answer = self.test_file.readline()[:-1]
         if answer != message:
+            print('turn: {}'.format(self.game.turn_number))
             print("{} != {}".format(answer, message))
             raise TestFailed()
 
 
 def run_test(test_file):
-    return Controller(test_file).test()
+    with Controller(test_file) as controller:
+        return controller.test()
 
 if __name__ == "__main__":
     if len(argv) < 1:
