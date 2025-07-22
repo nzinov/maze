@@ -25,3 +25,6 @@ class Position:
 
     def y(self):
         return self.pos[1]
+
+    def __str__(self):
+        return str((self.field,) + self.pos)
