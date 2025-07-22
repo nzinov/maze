@@ -213,7 +213,7 @@ class Game:
         raise GameEnded()
 
     def __getstate__(self):
-        return (self.field, self.players.get_state(), self.turn_number)
+        return (self.field, self.players, self.turn_number)
 
     def __setstate__(self, state):
         self.field, self.players, self.turn_number = state
