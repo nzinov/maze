@@ -68,6 +68,7 @@ class TelegramController:
             'Чтобы присоединиться, напишите мне в личку "/go {} <начальная позиция>"'.format(word))
         self.log(
             "Маленькие английские буквы по горизонтали, цифры с нуля по вертикали. Например, 'a3'")
+        self.log("Когда все игроки присоединятся, напишите /ready, чтобы начать игру")
         if self.field.description:
             self.log(self.field.description)
 
@@ -107,7 +108,7 @@ class TelegramController:
         action = message.text
         if not self.game:
             return
-        if message.from_user.id != self.game.players[self.game.current_player].pid:
+        if message.from_user.id != self.game.player().pid:
             return
         try:
             self.game.action(action)
