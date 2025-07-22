@@ -58,3 +58,11 @@ class Inventory:
 
     def __bool__(self):
         return bool(self.objects)
+
+    def get_excess(self, other):
+        res = {}
+        for obj, new_cnt in other.objects.items():
+            old_cnt = self.objects.get(obj, 0)
+            if new_cnt > old_cnt:
+                res[obj] = new_cnt - old_cnt
+        return type(self)(res)

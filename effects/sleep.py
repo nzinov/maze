@@ -12,6 +12,8 @@ class Sleep(Effect):
         self.start_position = start_position
 
     def expire(self, game, player):
+        sleep_loot = player.inventory.get_excess(player.spirit.inventory)
+        game.field[player.spirit.position].loot.update(sleep_loot)
         game.players.replace_player(player.spirit, player)
         game.players.remove_player(player.spirit)
         self._expire(player)
@@ -33,6 +35,9 @@ class Sleep(Effect):
         elif event == "die":
             self.expire(game, player)
             return False
+
+    def __str__(self):
+        return 'Sleep({})'.format(self.time)
 
 
 class Dream(ExpiringEffect):
