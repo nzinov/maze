@@ -65,3 +65,6 @@ class Dream(ExpiringEffect):
             game.log("Кошмар. Ну и приснится же такое!")
             self.wake()
             return True
+
+    def __str__(self):
+        return 'Dream({})'.format(self.time)

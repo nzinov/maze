@@ -12,6 +12,9 @@ class Effect:
         except ValueError:
             pass
 
+    def __repr__(self):
+        return str(self)
+
 
 class ExpiringEffect(Effect):
     time = 1

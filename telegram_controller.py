@@ -13,6 +13,7 @@ import linecache
 class TelegramController:
     instances = {}
     chat_codes = {}
+    debug = False
 
     @classmethod
     def wait(cls):
@@ -98,7 +99,7 @@ class TelegramController:
             self.log("Игра началась")
             self.log("Пишите 'помощь' в свой ход, чтобы узнать, что делать")
             shuffle(self.players)
-            self.game = Game(self, self.field, self.players)
+            self.game = Game(self, self.field, self.players, self.debug)
 
     def log(self, message):
         self.bot.sendMessage(chat_id=self.chat_id,

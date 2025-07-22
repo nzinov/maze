@@ -19,6 +19,10 @@ class Square:
             if self.message:
                 game.log(self.message)
 
+    def __str__(self):
+        return type(self).__name__
+
+
 class Minotaur(Square):
     def arrive(self, game, player):
         game.log("Вы попались МИНОТАВРУ. Жуткий конец.")

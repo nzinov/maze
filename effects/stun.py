@@ -17,3 +17,6 @@ class Stun(Effect):
             player.change_health(game, -10)
         else:
             super(Stun, self).event(game, player, event)
+
+    def __str__(self):
+        return 'Stun({})'.format(self.time)

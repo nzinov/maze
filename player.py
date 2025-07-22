@@ -14,6 +14,9 @@ class Player:
         self.pid = None
         self._health = self.MAX_HEALTH
 
+    def get_state(self):
+        return self.name, self.position, self.effects, self.inventory, self.active, self._health
+
     def event(self, game, event):
         """
         Fire corresponding effect for all effects on this player and square

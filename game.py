@@ -19,10 +19,8 @@ class Subfield:
 
     def can_move(self, position, direction):
         if not self.is_legal(position + direction):
-            print("Not legal")
             return False
         elif direction[0] == 0:
-            print("Bad")
             return not self.vert_walls[position.x()][position.y() + min(0, direction[1])]
         else:
             return not self.hor_walls[position.x() + min(0, direction[0])][position.y()]
@@ -142,11 +140,12 @@ class Players:
 
 class Game:
 
-    def __init__(self, controller, field, players):
+    def __init__(self, controller, field, players, debug=True):
         self.controller = controller
         self.field = field
         self.players = Players(players)
         self.turn_number = 0
+        self.debug = debug
         self.next_move()
 
     def log(self, player, message=None):
@@ -164,6 +163,9 @@ class Game:
             if self.player().active:
                 self.player().change_health(self, 1)
 
+            if self.debug:
+                player_state = self.player().get_state()
+                print(self.field[self.player().position], *player_state)
             new_round = self.players.rotate()
             if new_round:
                 for player in self.players:
