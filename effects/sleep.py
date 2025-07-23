@@ -25,9 +25,6 @@ class Sleep(Effect):
         self._expire(player)
         player.active = True
 
-        game.log("Вот что на самом деле лежит в вашей сумке: {}".format(
-            player.inventory))
-
     def event(self, game, player, event):
         super(Sleep, self).event(game, player, event)
         if event == "start":
@@ -57,6 +54,7 @@ class Dream(ExpiringEffect):
 
     def expire(self, game, player):
         game.log(player, "Вы проснулись")
+        game.log("Вот что на самом деле лежит в вашей сумке: {}".format(player.body.inventory))
         player.body.sleep.expire(game, player.body)
 
     def event(self, game, player, event):
