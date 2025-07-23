@@ -39,7 +39,7 @@ class Geanie(Player):
             return False
         else:
             if self.active:
-                game.log("Я ПОСЛЕДУЮ ЗА ВАМИ ПОВЕЛИТЕЛЬ!")
+                game.log("Я ПОСЛЕДУЮ ЗА ВАМИ, ПОВЕЛИТЕЛЬ!")
             return super().exit(game, False)
 
     def event(self, game, event):
