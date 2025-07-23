@@ -21,8 +21,8 @@ class Controller:
                 break
             else:
                 print("Недопустимые стартовые позиции!")
-        players = [Player(name, Position(0, pos))
-                   for name, pos in zip(players, positions)]
+        players = [Player(name, Position(0, pos, ind))
+                   for ind, (name, pos) in enumerate(zip(players, positions))]
         self.game = Game(self, field, players)
 
     def loop(self):

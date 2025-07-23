@@ -26,7 +26,7 @@ class Controller:
         players = []
         for i in range(player_number):
             line = self.test_file.readline()[:-1]
-            players.append(Player(str(i), Position(*map(int, line.split()))))
+            players.append(Player(str(i), Position(*map(int, line.split())), i))
             print(line, file=self.output)
         self.game = Game(self, field, players)
 

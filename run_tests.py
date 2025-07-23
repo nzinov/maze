@@ -10,7 +10,7 @@ for test_file in os.listdir(path='.'):
     if test_file.endswith(".test"):
         print("Running {}".format(test_file))
         run += 1
-        if not run_test(test_file):
+        if not run_test(test_file, debug=False):
             failed += 1
 os.chdir("../game_archive/")
 for field in os.listdir(path='.'):

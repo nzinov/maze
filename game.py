@@ -82,12 +82,13 @@ class Players:
 
     def rotate(self):
         if self._delete_current_on_rotate:
-            self._players.remove(self._current_ind)
+            del self._players[self._current_ind]
             self._delete_current_on_rotate = False
+            return False
         else:
             self._current_ind += 1
-        self._current_ind = self._current_ind % len(self._players)
-        return self._current_ind == 0
+            self._current_ind = self._current_ind % len(self._players)
+            return self._current_ind == 0
 
     def replace_player(self, base, replacement):
         ind = self._players.index(base)
@@ -127,9 +128,15 @@ class Players:
     def __iter__(self):
         all_players = self._players + self._hidden_players
         if self._delete_current_on_rotate:
-            return (player for ind, player in enumerate(all_players) if ind != self._current_ind)
+            return iter([player for ind, player in enumerate(all_players) if ind != self._current_ind])
         else:
             return iter(all_players)
+
+    def __bool__(self):
+        if self._delete_current_on_rotate:
+            return len(self._players) > 1
+        else:
+            return bool(self._players)
 
     def __getstate__(self):
         return (self._players, self._hidden_players, self._current_ind, self._delete_current_on_rotate)
@@ -143,7 +150,7 @@ class Game:
     def __init__(self, controller, field, players, debug=True):
         self.controller = controller
         self.field = field
-        self.players = Players(players)
+        self._players = Players(players)
         self.turn_number = 0
         self.debug = debug
         self.next_move()
@@ -156,7 +163,7 @@ class Game:
         self.controller.log(message)
 
     def player(self):
-        return self.players.current_player
+        return self._players.current_player
 
     def next_move(self):
         while True:
@@ -166,9 +173,9 @@ class Game:
             if self.debug:
                 player_state = self.player().get_state()
                 print(self.field[self.player().position], *player_state)
-            new_round = self.players.rotate()
+            new_round = self._players.rotate()
             if new_round:
-                for player in self.players:
+                for player in self._players:
                     player.event(self, "start_turn")
                 self.turn_number += 1
                 self.log("Начинается {} ход".format(self.turn_number))
@@ -179,6 +186,7 @@ class Game:
 
     def action(self, action):
         done = False
+        exit_command = "выйти из игры " + self.player().name.lower()
         action = action.lower()
         if action in DIRECTIONS:
             self.field.move(self, DIRECTIONS[action])
@@ -197,16 +205,41 @@ class Game:
 инвентарь - посмотреть инвентарь
 в, н, л, п - сходить в заданную сторону
 помощь - эта справка
+{} - покинуть игру, аккуратнее действие нельзя отменить
 помощь <предмет> - справка по предмету
 <предмет> <действие> - использовать специальное действие предмета
-                        """)
+                        """.format(exit_command).strip())
         elif action == "инвентарь":
             self.log("Содержимое сумки: {}".format(self.player().inventory))
         elif action.split()[0] in self.player().inventory:
             done = self.player().inventory.action(self, self.player(), action)
+        elif action == exit_command:
+            done = self.player().exit(self)
+            if not self._players:
+                self.log("Игроков не осталось, игра завершена")
+                raise GameEnded()
         if done:
             self.player().event(self, "move")
             self.next_move()
+
+    @property
+    def players(self):
+        return iter(self._players)
+
+    def add_player(self, player):
+        self._players.add_player(player)
+        if self.debug:
+            print("add player", *player.get_state())
+
+    def remove_player(self, player):
+        self._players.remove_player(player)
+        if self.debug:
+            print("remove player", *player.get_state())
+
+    def replace_player(self, base, replacement):
+        self._players.replace_player(base, replacement)
+        if self.debug:
+            print("replace player", *base.get_state(), "with", *replacement.get_state())
 
     def win(self, player):
         if player.event(self, "win"):
@@ -215,7 +248,7 @@ class Game:
         raise GameEnded()
 
     def __getstate__(self):
-        return (self.field, self.players, self.turn_number)
+        return (self.field, self._players, self.turn_number)
 
     def __setstate__(self, state):
-        self.field, self.players, self.turn_number = state
+        self.field, self._players, self.turn_number = state

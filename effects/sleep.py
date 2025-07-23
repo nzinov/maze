@@ -5,6 +5,13 @@ from copy import deepcopy
 from inventory import Inventory
 
 
+def drop_sleep_loot(game, spirit):
+    sleep_loot = spirit.body.inventory.get_excess(spirit.inventory)
+    if game.debug:
+        print('body loot', spirit.body.inventory, 'spirit loot', spirit.inventory, 'sleep loot', sleep_loot)
+    game.field[spirit.position].loot.update(sleep_loot)
+
+
 class Sleep(Effect):
 
     def __init__(self, time, start_position):
@@ -12,10 +19,9 @@ class Sleep(Effect):
         self.start_position = start_position
 
     def expire(self, game, player):
-        sleep_loot = player.inventory.get_excess(player.spirit.inventory)
-        game.field[player.spirit.position].loot.update(sleep_loot)
-        game.players.replace_player(player.spirit, player)
-        game.players.remove_player(player.spirit)
+        drop_sleep_loot(game, player.spirit)
+        game.replace_player(player.spirit, player)
+        game.remove_player(player.spirit)
         self._expire(player)
         player.active = True
 
@@ -30,7 +36,7 @@ class Sleep(Effect):
             player.spirit.effects.pop()  # remove this effect
             player.spirit.position = self.start_position
             player.spirit.add_effect(game, Dream(self.time, player))
-            game.players.replace_player(player, player.spirit)
+            game.replace_player(player, player.spirit)
             player.active = False
         elif event == "die":
             self.expire(game, player)
@@ -57,7 +63,10 @@ class Dream(ExpiringEffect):
         super(Dream, self).event(game, player, event)
         if event == "start":
             player.body = self.body
-        if event == "win":
+        elif event == "exit":
+            drop_sleep_loot(game, player)
+            player.inventory = Inventory()
+        elif event == "win":
             game.log("Какой приятный был сон!")
             self.wake()
             return True

@@ -22,8 +22,8 @@ class Controller:
         for el in positions:
             print(el.field, el.x(), el.y(), file=self.test_file)
         field = read_field(field_file)
-        players = [Player(str(name), pos)
-                   for name, pos in enumerate(positions)]
+        players = [Player(str(player_ind), pos, player_ind)
+                   for player_ind, pos in enumerate(positions)]
         self.game = Game(self, field, players)
 
     def loop(self):

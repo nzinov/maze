@@ -24,16 +24,23 @@ class Geanie(Player):
     MAX_HEALTH = 40
 
     def __init__(self, master):
-        super(Geanie, self).__init__("Джин ибн {}".format(master.name), master.position)
+        super(Geanie, self).__init__("Джин ибн {}".format(master.name), master.position, master.pid)
         self.master = master
-        self.pid = master.pid
         self.inventory.add("ятаган")
-        self.live = 5
 
     def disappear(self, game):
-        game.log(self, "Я ХОРОШО ПОСЛУЖИЛ ТЕБЕ, ПОВЕЛИТЕЛЬ. прощай...")
+        game.log("Я ХОРОШО ПОСЛУЖИЛ ТЕБЕ, ПОВЕЛИТЕЛЬ. прощай...")
         self._die(game)
-        game.players.remove_player(self)
+        game.remove_player(self)
+
+    def exit(self, game, recurse=True):
+        if recurse:
+            game.log("ПОВЕЛИТЕЛЬ, Я УЙДУ ТОЛЬКО ВСЛЕД ЗА ВАМИ!")
+            return False
+        else:
+            if self.active:
+                game.log("Я ПОСЛЕДУЮ ЗА ВАМИ ПОВЕЛИТЕЛЬ!")
+            return super().exit(game, False)
 
     def event(self, game, event):
         if event == "before_move":
@@ -85,7 +92,7 @@ class Bottle(Object):
             game.log("Раздался страшный треск, из бытылки пошел дым и появился джин.")
             game.log("БЛАГОДАРЮ ТЕБЯ, ОСВОБОДИВШЕГО МЕНЯ ИЗ ЗАТОЧЕНИЯ")
             game.log("Я ПОЙДУ, КУДА ТЫ ПРИКАЖЕШЬ И СОКРУШУ ЛЮБЫЕ СТЕНЫ СВОИМ ЯТАГАНОМ")
-            game.players.add_player(Geanie(player))
+            game.add_player(Geanie(player))
             return True
 
 

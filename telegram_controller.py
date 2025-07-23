@@ -85,9 +85,8 @@ class TelegramController:
         except ValueError:
             update.message.reply_text("Недопустимая позиция")
         else:
-            player = Player(name, pos)
+            player = Player(name, pos, pid)
             self.players.append(player)
-            player.pid = pid
             update.message.reply_text("Отлично")
             self.log("Присоединился игрок {}".format(player))
 
@@ -111,10 +110,7 @@ class TelegramController:
             return
         if message.from_user.id != self.game.player().pid:
             return
-        try:
-            self.game.action(action)
-        except GameEnded:
-            pass
+        self.game.action(action)
 
     @staticmethod
     def on_message(bot, update):
@@ -122,8 +118,11 @@ class TelegramController:
             pickle.dump(TelegramController.instances, f)
         if update.message.chat_id in TelegramController.instances:
             TelegramController.instances[update.message.chat_id].bot = bot
-            TelegramController.instances[
-                update.message.chat_id].action(update.message)
+            try:
+                TelegramController.instances[
+                    update.message.chat_id].action(update.message)
+            except GameEnded:
+                del TelegramController.instances[update.message.chat_id]
 
     def __getstate__(self):
         return (self.chat_id, self.game)

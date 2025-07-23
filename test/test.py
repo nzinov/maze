@@ -19,8 +19,9 @@ class TestFailed(Exception):
 
 class Controller:
 
-    def __init__(self, test_file):
+    def __init__(self, test_file, debug):
         self.path = test_file
+        self.debug = debug
 
     def __enter__(self):
         self.test_file = open(self.path, "r")
@@ -29,9 +30,9 @@ class Controller:
         player_number = int(self.test_file.readline())
         players = []
         for i in range(player_number):
-            players.append(Player(str(i), Position(
-                *map(int, self.test_file.readline().split()))))
-        self.game = Game(self, field, players)
+            pos = Position(*map(int, self.test_file.readline().split()))
+            players.append(Player(str(i), pos, i))
+        self.game = Game(self, field, players, self.debug)
         return self
 
     def test(self):
@@ -56,15 +57,16 @@ class Controller:
         self.test_file.close()
 
     def log(self, message):
-        answer = self.test_file.readline()[:-1]
-        if answer != message:
-            print('turn: {}'.format(self.game.turn_number))
-            print("{} != {}".format(answer, message))
-            raise TestFailed()
+        for line in message.split('\n'):
+            answer = self.test_file.readline()[:-1]
+            if answer != line:
+                print('turn: {}'.format(self.game.turn_number))
+                print("'{}' != '{}'".format(answer, line))
+                raise TestFailed()
 
 
-def run_test(test_file):
-    with Controller(test_file) as controller:
+def run_test(test_file, debug=True):
+    with Controller(test_file, debug) as controller:
         return controller.test()
 
 if __name__ == "__main__":

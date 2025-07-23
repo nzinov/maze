@@ -4,18 +4,18 @@ from inventory import Inventory
 class Player:
     MAX_HEALTH = 100
 
-    def __init__(self, name, position):
+    def __init__(self, name, position, pid):
         self.start_position = position
         self.position = position
         self.effects = []
         self.inventory = Inventory()
         self.name = name
         self.active = True
-        self.pid = None
+        self.pid = pid
         self._health = self.MAX_HEALTH
 
     def get_state(self):
-        return self.name, self.position, self.effects, self.inventory, self.active, self._health
+        return self.name, self.pid, self.position, self.effects, self.inventory, self.active, self._health
 
     def event(self, game, event):
         """
@@ -29,6 +29,7 @@ class Player:
         start - fired on newly created effect
         die - player is to die - kill player
         win - player is to win - finish game
+        exit - player exits the game
         arrive - player arrives to a new square
         start_turn - fired for all players when the first player starts move
 
@@ -41,10 +42,26 @@ class Player:
             prevent_default = True
         return prevent_default
 
-    def _die(self, game):
-        game.log(self, "Вы умерли")
+    def drop_loot(self, game):
         game.field[self.position].loot.update(self.inventory)
         self.inventory = Inventory()
+
+    def exit(self, game, recurse=True):
+        self.event(game, "exit")
+        self.drop_loot(game)
+        if self.active:
+            game.log('Игрок {} покинул игру'.format(self))
+
+        game.remove_player(self)
+        if recurse:
+            for player in game.players:
+                if player.pid == self.pid:
+                    player.exit(game, False)
+        return True
+
+    def _die(self, game):
+        game.log(self, "Вы умерли")
+        self.drop_loot(game)
         self.position = self.start_position
         self.effects = []
         self._health = self.MAX_HEALTH
