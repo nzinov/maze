@@ -1,9 +1,6 @@
 from constants import DIRECTIONS
 from objects import OBJECTS
-
-
-class GameEnded(Exception):
-    pass
+from exceptions import GameEnded
 
 
 class Subfield:

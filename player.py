@@ -68,8 +68,9 @@ class Player:
 
     def die(self, game):
         if self.event(game, "die"):
-            return
+            return False
         self._die(game)
+        return True
 
     def add_effect(self, game, effect):
         self.effects.append(effect)

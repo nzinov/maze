@@ -1,4 +1,5 @@
 from inventory import Inventory
+from exceptions import GameEnded
 
 
 class Square:
@@ -24,6 +25,10 @@ class Square:
 
 
 class Minotaur(Square):
-    def arrive(self, game, player):
-        game.log("Вы попались МИНОТАВРУ. Жуткий конец.")
-        player.die(game)
+    def event(self, game, player, event):
+        if event == "arrive":
+            game.log("Вы попались МИНОТАВРУ. Жуткий конец.")
+            die_for_real = player.die(game)
+            if die_for_real and 'сокровище' in self.loot:
+                game.log("Сокровищем завладел МИНОТАВР. Игра окончена.")
+                raise GameEnded()
