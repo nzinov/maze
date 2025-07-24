@@ -10,8 +10,8 @@ A.R..
 ...
 R..
 E Exit(RIGHT)
-T Stuff({"сокровище": 1})
-S EffectorSquare(lambda: Stun(2), "Вы попали в ловушку")
+T Square(objects={"сокровище": 1})
+S EffectorSquare(lambda: Stun(2), message="Вы попали в ловушку")
 Z EffectorSquare(lambda: Sleep(3, Position(1, 0, 0)))
 A Armory()
 R RubberRoom(RIGHT)

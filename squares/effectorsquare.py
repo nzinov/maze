@@ -3,8 +3,8 @@ from .square import Square
 
 class EffectorSquare(Square):
 
-    def __init__(self, effect_class, message=None):
-        super(EffectorSquare, self).__init__(message)
+    def __init__(self, effect_class, **kwargs):
+        super(EffectorSquare, self).__init__(**kwargs)
         self.effect_class = effect_class
 
     def event(self, game, player, event):

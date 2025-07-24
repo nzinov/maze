@@ -23,13 +23,13 @@ b: :<:X:  B: :c
  :B:T: 
 =+.+.+.
 E: : :^
-B Stuff({"бутылка": 1})
+B Square(objects={"бутылка": 1})
 E Exit(LEFT)
-T Stuff({"сокровище": 1})
+T Square(objects={"сокровище": 1})
 A Armory()
-X Stuff({"зачарованная_бутылка": 1})
-C Stuff({"дубина": 1})
-R Stuff({"скакалка": 1})
+X Square(objects={"зачарованная_бутылка": 1})
+C Square(objects={"дубина": 1})
+R Square(objects={"скакалка": 1})
 Z EffectorSquare(lambda: Sleep(7, Position(1, 3, 2)))
 D EffectorSquare(lambda: Sleep(4, Position(1, 0, 3)))
 a Hole(Position(0, 7, 7))

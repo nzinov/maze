@@ -7,8 +7,8 @@ E:Z
 ..T
 ...
 ...
-B Stuff({"бутылка": 1})
+B Square(objects={"бутылка": 1})
 E Exit(LEFT)
-T Stuff({"сокровище": 1})
+T Square(objects={"сокровище": 1})
 Z EffectorSquare(lambda: Sleep(3, Position(1, 0, 0)))
 """

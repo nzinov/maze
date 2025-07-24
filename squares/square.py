@@ -4,8 +4,11 @@ from exceptions import GameEnded
 
 class Square:
 
-    def __init__(self, message=None):
-        self.loot = Inventory()
+    def __init__(self, message=None, objects=None):
+        if objects:
+            self.loot = Inventory(objects)
+        else:
+            self.loot = Inventory()
         self.message = message
 
     def can_move(self, game, player, direction):

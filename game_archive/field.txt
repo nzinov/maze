@@ -4,36 +4,36 @@
 .+.+.+.+.+.+.+.
  :^: : : : :R:R
 .+.+.+.+.+=+.+=
- | :B| : |G: : 
+ | :B| : |G: :
 .+.+=+.+=+.+.+.
- : : : : : | : 
+ : : : : : | :
 .+.+.+.+=+.+.+=
-W: : : :<: :V: 
+W: : : :<: :V:
 =+.+=+.+=+.+.+.
 G: : : |T| | :W
 =+=+.+=+.+.+.+=
->:Z: : | : |A: 
+>:Z: : | : |A:
 .+.+.+.+=+=+.+.
-@: :E: : : : : 
+@: :E: : : : :
 4
- :G: : 
+ :G: :
 .+.+.+.
- :O:D: 
+ :O:D:
 .+=+.+.
->: :<: 
+>: :<:
 .+.+.+.
- |^| : 
+ |^| :
 3
 T:M:T
 .+.+.
 T:O:T
 .+.+.
 T:E:T
-T Stuff({"сокровище": 1})
+T Square(objects={"сокровище": 1})
 E Exit(DOWN)
 M Minotaur()
 R Square("Вы слышите РЫК МИНОТАВРА!")
-W Stuff({"посох": 1})
+W Square(objects={"посох": 1})
 A Hole((2, 2))
 B Hole((6, 6))
 G Armory()
@@ -43,4 +43,4 @@ G Armory()
 V RubberRoom(DOWN)
 Z EffectorSquare(lambda: Sleep(7, 1, (1, 1)))
 D EffectorSquare(lambda: Sleep(4, 2, (1, 1)))
-@ EffectorSquare(lambda: Stun(3), "Вы попали в ловушку!")
+@ EffectorSquare(lambda: Stun(3), message="Вы попали в ловушку!")

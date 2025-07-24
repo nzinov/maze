@@ -3,8 +3,8 @@ from .square import Square
 
 class RubberRoom(Square):
 
-    def __init__(self, direction):
-        super(RubberRoom, self).__init__()
+    def __init__(self, direction, **kwargs):
+        super(RubberRoom, self).__init__(**kwargs)
         self.direction = direction
 
     def can_move(self, game, player, direction):

@@ -11,7 +11,7 @@ S|E
  :A 
 .+.
 A: 
-T Stuff({"сокровище": 1})
+T Square(objects={"сокровище": 1})
 E Exit(RIGHT)
 < Exit(LEFT)
 A Armory()

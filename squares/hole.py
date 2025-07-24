@@ -3,8 +3,8 @@ from .square import Square
 
 class Hole(Square):
 
-    def __init__(self, target):
-        super(Hole, self).__init__()
+    def __init__(self, target, **kwargs):
+        super(Hole, self).__init__(**kwargs)
         self.target = target
 
     def event(self, game, player, event):

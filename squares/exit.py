@@ -3,8 +3,8 @@ from .square import Square
 
 class Exit(Square):
 
-    def __init__(self, direction):
-        super(Exit, self).__init__()
+    def __init__(self, direction, **kwargs):
+        super(Exit, self).__init__(**kwargs)
         self.direction = direction
 
     def can_move(self, game, player, direction):

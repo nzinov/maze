@@ -11,5 +11,5 @@ T: :
 4 River(Position(0,1,1))
 G Armory()
 E Exit(LEFT)
-T Stuff({"сокровище": 1})
+T Square(objects={"сокровище": 1})
 """

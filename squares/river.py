@@ -3,8 +3,8 @@ from .square import Square
 
 class River(Square):
 
-    def __init__(self, destination):
-        super(River, self).__init__()
+    def __init__(self, destination, **kwargs):
+        super(River, self).__init__(**kwargs)
         self.destination = destination
 
     def event(self, game, player, event):
