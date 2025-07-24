@@ -34,6 +34,7 @@ class Sleep(Effect):
             player.spirit.position = self.start_position
             player.spirit.add_effect(game, Dream(self.time, player))
             game.replace_player(player, player.spirit)
+            player.spirit.event(game, "arrive")
             player.active = False
         elif event == "die":
             self.expire(game, player)
