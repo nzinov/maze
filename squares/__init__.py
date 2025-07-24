@@ -5,3 +5,4 @@ from .effectorsquare import *
 from .exit import *
 from .rubberroom import *
 from .hole import *
+from .poison_cloud import *
