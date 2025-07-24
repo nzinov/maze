@@ -32,20 +32,25 @@ class Controller:
 
     def loop(self):
         try:
-            while True:
-                action = self.test_file.readline()[:-1]
+            for line in self.test_file:
+                action = line.strip()
                 if not action:
                     break
                 if action[:3] == ">>>":
                     print(action, file=self.output)
                     action = action[3:]
                     self.game.action(action)
+            while True:
+                print("Введите команду: ", end="")
+                action = input()
+                print(">>>{}".format(action), file=self.output)
+                self.game.action(action)
         except GameEnded:
-            pass
-        print("Successfuly regenerated!")
+            print("Successfuly regenerated!")
         self.output.close()
 
     def log(self, message):
+        print(message)
         print(message, file=self.output)
 
 
