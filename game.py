@@ -81,7 +81,11 @@ class Players:
         if self._delete_current_on_rotate:
             del self._players[self._current_ind]
             self._delete_current_on_rotate = False
-            return False
+            if self._current_ind == len(self._players):
+                self._current_ind = 0
+                return True
+            else:
+                return False
         else:
             self._current_ind += 1
             self._current_ind = self._current_ind % len(self._players)
