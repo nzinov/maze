@@ -14,17 +14,19 @@ def register_object(name, cls=None):
     else:
         return helper(cls)
 
+
 register_object("сокровище", Object)
 
+
 @register_object("посох")
-class Bullet(Object):
+class LuStaff(Object):
     "Это древний артефакт - Посох Несчастного Лурьехи. Кажется, если им 'махнуть', что-то произойдет"
     @staticmethod
     def action(game, player, action):
         if action == "махнуть":
             if not hasattr(player, 'cock'):
                 game.log("Вы взмахнули посохом - и стены лабиринта огласил дурацкий смех.")
-                player.name = "Петух {}".format(player.name)
+                player.name = "{} - петух!".format(player.name)
                 player.cock = True
             else:
                 game.log('"Петух! Петух!" - раздается голос из ниоткуда, и опять звучит странный смех.')

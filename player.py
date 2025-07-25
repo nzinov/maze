@@ -80,7 +80,7 @@ class Player:
         return "@" + self.name
 
     def name_as_hashtag(self):
-        return "#" + self.name
+        return "#" + self.name.replace(' ', '_')
 
     @property
     def health(self):

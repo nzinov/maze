@@ -22,11 +22,15 @@ class FeelMyPower(Effect):
 
 class Geanie(Player):
     MAX_HEALTH = 40
+    PREFIX = "Джин ибн "
 
     def __init__(self, master):
-        super(Geanie, self).__init__("Джин ибн {}".format(master.name), master.position, master.pid)
+        super(Geanie, self).__init__(self.PREFIX + master.name, master.position, master.pid)
         self.master = master
         self.inventory.add("ятаган")
+
+    def __str__(self):
+        return self.PREFIX + "@" + self.master.name
 
     def disappear(self, game):
         game.log("Я ХОРОШО ПОСЛУЖИЛ ТЕБЕ, ПОВЕЛИТЕЛЬ. прощай...")
