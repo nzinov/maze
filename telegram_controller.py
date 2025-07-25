@@ -7,6 +7,7 @@ from player import Player
 from random import shuffle, randint
 import dill as pickle
 from emoji import emojize
+from string import ascii_lowercase
 import linecache
 
 
@@ -55,52 +56,55 @@ class TelegramController:
         self.field = read_field(fname)
         self.chat_id = chat_id
         self.players = []
-        self.accept_players = True
+        self.game_started = False
         self.game = None
 
     def start(self):
         rand_id = randint(0, 10000)
         word = linecache.getline("word_dict.txt", rand_id)[:-1]
         TelegramController.chat_codes[word] = self
+        self.log_file = open('logs/' + word + '.log', 'w')
+        size = self.field.fields[0].size
+        assert size <= len(ascii_lowercase), 'size {} is too big'.format(size)
         self.log("Начинается игра!")
-        self.log("Поле имеет размеры {0}x{0}".format(
-            self.field.fields[0].size))
-        self.log(
-            'Чтобы присоединиться, напишите мне в личку "/go {} <начальная позиция>"'.format(word))
-        self.log(
-            "Маленькие английские буквы по горизонтали, цифры с нуля по вертикали. Например, 'a3'")
+        self.log("Поле имеет размеры {0}x{0}".format(size))
+        self.log('Чтобы присоединиться, напишите мне в личку "/go {} <начальная позиция>"'.format(word))
+        self.log("Маленькие английские буквы по горизонтали, число с нуля по вертикали. Например, 'b3'")
         self.log("Когда все игроки присоединятся, напишите /ready, чтобы начать игру")
         if self.field.description:
             self.log(self.field.description)
 
     def add(self, update, pid, name, pos):
-        if not self.accept_players:
-            update.message.reply_text("К этой игре нельзя присоединиться")
         try:
-            x = int(pos[1])
+            x = int(pos[1:])
             y = ord(pos[0]) - ord('a')
             pos = Position(0, x, y)
             if not self.field.is_legal(pos):
                 raise ValueError
         except ValueError:
             update.message.reply_text("Недопустимая позиция")
+            return
+        player = Player(name, pos, pid)
+        print(player.name, pos, file=self.log_file)
+        if self.game_started:
+            self.game.add_player(player)
         else:
-            player = Player(name, pos, pid)
             self.players.append(player)
             update.message.reply_text("Отлично")
-            self.log("Присоединился игрок {}".format(player))
+        self.log("Присоединился игрок {}".format(player))
 
     @staticmethod
     def ready(bot, update):
         if update.message.chat_id in TelegramController.instances:
             self = TelegramController.instances[update.message.chat_id]
-            self.accept_players = False
+            self.game_started = True
             self.log("Игра началась")
             self.log("Пишите 'помощь' в свой ход, чтобы узнать, что делать")
             shuffle(self.players)
             self.game = Game(self, self.field, self.players, self.debug)
 
     def log(self, message):
+        print(message, file=self.log_file)
         self.bot.sendMessage(chat_id=self.chat_id,
                              text=emojize(message, use_aliases=True))
 
@@ -110,6 +114,7 @@ class TelegramController:
             return
         if message.from_user.id != self.game.player().pid:
             return
+        print('>>>' + action, file=self.log_file)
         self.game.action(action)
 
     @staticmethod
