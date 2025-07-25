@@ -170,6 +170,7 @@ class Game:
         while True:
             if self.player().active:
                 self.player().change_health(self, 1)
+                self.player().event(self, "end_turn")
 
             if self.debug:
                 player_state = self.player().get_state()
@@ -177,7 +178,7 @@ class Game:
             new_round = self._players.rotate()
             if new_round:
                 for player in self._players:
-                    player.event(self, "start_turn")
+                    player.event(self, "start_round")
                 self.turn_number += 1
                 self.log("Начинается {} ход".format(self.turn_number))
             if self.player().active:

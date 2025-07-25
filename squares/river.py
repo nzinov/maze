@@ -9,6 +9,6 @@ class River(Square):
 
     def event(self, game, player, event):
         super(River, self).event(game, player, event)
-        if event == "start_turn":
+        if event == "start_round":
             player.position = self.destination
             player.event(game, "arrive")
