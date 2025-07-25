@@ -31,6 +31,9 @@ class TelegramController:
             pass
         cls.updater.start_polling()
         cls.updater.idle()
+        for instance in cls.instances.values():
+            if hasattr(instance, 'log_file'):
+                instance.log_file.close()
 
     @staticmethod
     def create(bot, update):
@@ -127,6 +130,8 @@ class TelegramController:
                 TelegramController.instances[
                     update.message.chat_id].action(update.message)
             except GameEnded:
+                bot = TelegramController.instances[update.message.chat_id]
+                bot.log_file.close()
                 del TelegramController.instances[update.message.chat_id]
 
     def __getstate__(self):
