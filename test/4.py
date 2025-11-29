@@ -1,13 +1,12 @@
-"""1 
-3 
-1:2:3 
+"""1
+3
+1:1:2
 .+.+.
 J: :T
 .+.+.
  : :E
-1 River(Position(0, 0, 1))
-2 River(Position(0, 0, 2))
-3 River(Position(0, 1, 2))
+1 River(RIGHT)
+2 River(DOWN)
 J Square(objects={"скакалка": 1})
 T Square(objects={"сокровище": 1})
 E Exit(RIGHT)

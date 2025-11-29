@@ -1,14 +1,13 @@
 """1
 3
-1:2:3
+1:1:2
 .+.+.
-E:G:4
+E:G:3
 .+.+=
-T: : 
-1 River(Position(0,0,1))
-2 River(Position(0,0,2))
-3 River(Position(0,1,2))
-4 River(Position(0,1,1))
+T: :
+1 River(RIGHT)
+2 River(DOWN)
+3 River(LEFT)
 G Armory()
 E Exit(LEFT)
 T Square(objects={"сокровище": 1})

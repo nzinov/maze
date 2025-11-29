@@ -6,21 +6,21 @@ E: | : :D: | :V
 =+.+.+.+ +.+.+.
 A:X|>: :<|B: :C
 .+.+.+=+=+=+=+.
- |R|3: :Z:R:X: 
+ |R|1: :Z:R:X:
 .+.+.+=+.+.+.+.
-V: :2|T| : | : 
+V: :1|T| : | :
 .+.+.+=+.+=+.+.
 X: |1: : |B: :X
-.+.+=+=+.+.+=+ 
+.+.+=+=+.+.+=+
 B| : :C| : | :A
 =+.+.+.+.+=+ +=
 b: :<:X:  B: :c
 4
  : :>:<
 .+.+.+.
- : : : 
+ : : :
 .+=+.+.
- :B:T: 
+ :B:T:
 =+.+.+.
 E: : :^
 B Square(objects={"бутылка": 1})
@@ -36,9 +36,7 @@ a Hole(Position(0, 7, 7))
 b Hole(Position(0, 0, 7))
 c Hole(Position(0, 0, 0))
 d Hole(Position(0, 7, 0))
-1 River(Position(0, 4, 2))
-2 River(Position(0, 3, 2))
-3 River(Position(0, 2, 2))
+1 River(UP)
 V RubberRoom(DOWN)
 ^ RubberRoom(UP)
 > RubberRoom(RIGHT)
