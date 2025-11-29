@@ -3,3 +3,4 @@ from .club import *
 from .bullet import *
 from .jumpingrope import *
 from .compass import *
+from .railgun import *

@@ -66,6 +66,13 @@ class Field:
                 NAME[direction]))
             game.player().change_health(game, -5)
 
+    def destroy_wall(self, position, direction):
+        subfield = self.fields[position.field]
+        if direction[0] == 0:
+            subfield.vert_walls[position.x()][position.y() + min(0, direction[1])] = False
+        else:
+            subfield.hor_walls[position.x() + min(0, direction[0])][position.y()] = False
+
     def __getitem__(self, position):
         return self.fields[position.field][position]
 

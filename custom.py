@@ -77,12 +77,7 @@ class Yataghan(Object):
             else:
                 game.log("Пара мощных ударов - и стены как не бывало")
                 game.log("РАД СТАРАТЬСЯ, ПОВЕЛИТЕЛЬ")
-                subfield = game.field.fields[player.position.field]
-                position = player.position
-                if direction[0] == 0:
-                    subfield.vert_walls[position.x()][position.y() + min(0, direction[1])] = False
-                else:
-                    subfield.hor_walls[position.x() + min(0, direction[0])][position.y()] = False
+                game.field.destroy_wall(player.position, direction)
             return False
 
 
