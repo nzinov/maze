@@ -10,7 +10,7 @@ class FeelMyPower(Effect):
         super(FeelMyPower, self).event(game, player, event)
         if isinstance(player, Geanie):
             return False
-        if event == "before_move":
+        if event == "start_turn":
             for other in game.players:
                 if (other.position == player.position
                         and isinstance(other, Geanie)
@@ -47,7 +47,7 @@ class Geanie(Player):
             return super().exit(game, False)
 
     def event(self, game, event):
-        if event == "before_move":
+        if event == "start_turn":
             game.log("СЛУШАЮ И ПОВИНУЮСЬ")
         prevent_default = super(Geanie, self).event(game, event)
         if not prevent_default:

@@ -25,13 +25,14 @@ class Player:
         name - when fired - default action
         ---------------------------------
         move - after player move
-        before_move - before player move - proceed to the move
         start - fired on newly created effect
         die - player is to die - kill player
         win - player is to win - finish game
         exit - player exits the game
         arrive - player arrives to a new square
-        start_turn - fired for all players when the first player starts move
+        start_round - fired for all players when the first player starts move
+        start_turn - start of player turn, before any action
+        end_turn - end of player turn, after all actions
 
         """
         prevent_default = False

@@ -9,7 +9,7 @@ class Stun(Effect):
         assert damage < 0
 
     def event(self, game, player, event):
-        if event == "before_move":
+        if event == "start_turn":
             game.log("Вы пропускаете ход")
             self.time -= 1
             if self.time == 0:

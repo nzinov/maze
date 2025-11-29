@@ -12,6 +12,6 @@ class PoisonCloud(Square):
         super().event(game, player, event)
         if event == "arrive":
             game.log("Вы вошли в комнату, заполненную ядовито-зеленым газом")
-        if event == "before_move":
+        if event == "start_turn":
             game.log("*Кхе-кхе*, чертов газ!")
             player.change_health(game, self.damage)

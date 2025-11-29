@@ -184,7 +184,7 @@ class Game:
             if self.player().active:
                 break
         self.log("--- {} ---".format(self.player()))
-        self.player().event(self, "before_move")
+        self.player().event(self, "start_turn")
 
     def action(self, action):
         done = False
