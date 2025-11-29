@@ -1,6 +1,7 @@
 from constants import DIRECTIONS
 from objects import OBJECTS
 from exceptions import GameEnded
+from events import AfterChose, AfterMove
 
 
 class Subfield:
@@ -55,6 +56,9 @@ class Field:
             result = self.can_move(game.player().position, direction)
             if result:
                 self._move(game, game.player(), direction)
+        after_move = AfterMove(direction)
+        if game.player().event(game, after_move):
+            direction = after_move.direction
         if result:
             game.log(game.player(), "Вы сходили {}".format(NAME[direction]))
         else:
@@ -190,6 +194,9 @@ class Game:
         done = False
         exit_command = "выйти из игры " + self.player().name.lower()
         action = action.lower()
+        after_choice = AfterChose(action)
+        if self.player().event(self, after_choice):
+            action = after_choice.action
         if action in DIRECTIONS:
             self.field.move(self, DIRECTIONS[action])
             done = True
