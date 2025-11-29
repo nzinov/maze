@@ -11,14 +11,10 @@ class Railgun(Object):
             position = player.position
             direction = DIRECTIONS[action]
             while True:
-                hit = False
                 for other in game.players:
                     if other.position == position and player.name != other.name:
-                        hit = True
                         game.log("Вы попали в игрока {}".format(other.name))
                         other.die(game)
-                if hit:
-                    return True
                 if not game.field.is_legal(position + direction):
                     game.log("Вот это да, эту стену даже рейлган не берет!")
                     return True
@@ -27,4 +23,3 @@ class Railgun(Object):
                 else:
                     game.log("Вay, стены как не бывало!")
                     game.field.destroy_wall(position, direction)
-                    return True
