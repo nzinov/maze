@@ -15,6 +15,7 @@ class TelegramController:
     instances = {}
     chat_codes = {}
     debug = False
+    add_command = "/go {} <начальная позиция>"
 
     @classmethod
     def wait(cls):
@@ -24,11 +25,12 @@ class TelegramController:
         cls.updater.dispatcher.add_handler(CommandHandler('ready', cls.ready))
         cls.updater.dispatcher.add_handler(
             MessageHandler([Filters.text], cls.on_message))
-        try:
-            with open("pickle.bin", "rb") as f:
-                cls.instances = pickle.load(f)
-        except FileNotFoundError:
-            pass
+        if cls.do_pickle:
+            try:
+                with open("pickle.bin", "rb") as f:
+                    cls.instances = pickle.load(f)
+            except FileNotFoundError:
+                pass
         cls.updater.start_polling()
         cls.updater.idle()
         for instance in cls.instances.values():
@@ -42,9 +44,15 @@ class TelegramController:
         TelegramController.instances[update.message.chat_id] = instance
         instance.start()
 
-    @staticmethod
-    def go(bot, update):
-        _, chat_code, pos = update.message.text.split()
+    @classmethod
+    def go(cls, bot, update):
+        try:
+            _, chat_code, pos = update.message.text.split()
+        except ValueError:
+            update.message.reply_text(
+                "Неверный формат, чтобы присоединиться к игре введите: " + cls.add_command.format('<код игры>')
+            )
+            return
         pid = update.message.from_user.id
         name = update.message.from_user.username
         print(chat_code)
@@ -71,7 +79,7 @@ class TelegramController:
         assert size <= len(ascii_lowercase), 'size {} is too big'.format(size)
         self.log("Начинается игра!")
         self.log("Поле имеет размеры {0}x{0}".format(size))
-        self.log('Чтобы присоединиться, напишите мне в личку "/go {} <начальная позиция>"'.format(word))
+        self.log('Чтобы присоединиться, напишите мне в личку ' + self.add_command.format(word))
         self.log("Маленькие английские буквы по горизонтали, число с нуля по вертикали. Например, 'b3'")
         self.log("Когда все игроки присоединятся, напишите /ready, чтобы начать игру")
         if self.field.description:
@@ -120,10 +128,11 @@ class TelegramController:
         print('>>>' + action, file=self.log_file)
         self.game.action(action)
 
-    @staticmethod
-    def on_message(bot, update):
-        with open("pickle.bin", "wb") as f:
-            pickle.dump(TelegramController.instances, f)
+    @classmethod
+    def on_message(cls, bot, update):
+        if cls.do_pickle:
+            with open("pickle.bin", "wb") as f:
+                pickle.dump(TelegramController.instances, f)
         if update.message.chat_id in TelegramController.instances:
             TelegramController.instances[update.message.chat_id].bot = bot
             try:
