@@ -3,3 +3,4 @@ emoji==0.3.9
 python-telegram-bot==5.1.0
 coverage
 codeclimate-test-reporter
+standard-imghdr
