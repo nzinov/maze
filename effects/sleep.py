@@ -55,6 +55,9 @@ class Dream(ExpiringEffect):
 
     def expire(self, game, player):
         game.log(player, "Вы проснулись")
+        for minion in player.minions:
+            game.log(player, f"Вы нигде не видите {minion}")
+            game.remove_player(minion)
         game.log("Вот что на самом деле лежит в вашей сумке: {}".format(player.body.inventory))
         player.body.sleep.expire(game, player.body)
 

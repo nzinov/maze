@@ -27,6 +27,7 @@ class Geanie(Player):
     def __init__(self, master):
         super(Geanie, self).__init__(self.PREFIX + master.name, master.position, master.pid)
         self.master = master
+        master.minions.append(self)
         self.inventory.add("ятаган")
 
     def __str__(self):

@@ -8,6 +8,7 @@ class Player:
         self.start_position = position
         self.position = position
         self.effects = []
+        self.minions = []
         self.inventory = Inventory()
         self.name = name
         self.active = True
