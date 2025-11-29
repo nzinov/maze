@@ -48,7 +48,10 @@ class Inventory:
         return key in self.objects
 
     def action(self, game, player, action):
-        obj, action = action.split()
+        try:
+            obj, action = action.split(maxsplit=1)
+        except ValueError:
+            return False
         if obj not in self.objects:
             raise KeyError()
         is_used = OBJECTS[obj].action(game, player, action)
