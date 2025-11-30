@@ -1,5 +1,6 @@
 from inventory import Inventory
 from exceptions import GameEnded
+from events import PlayerArrive
 
 
 class Square:
@@ -15,12 +16,12 @@ class Square:
         return None
 
     def event(self, game, player, event):
-        if event == "arrive":
+        if isinstance(event, PlayerArrive):
             if self.loot:
                 game.log(player, "Найдены предметы: {}".format(self.loot))
                 player.inventory.update(self.loot)
                 self.loot = Inventory()
-        message = self.messages.get(event)
+        message = self.messages.get(event.name)
         if message:
             game.log(message)
 
@@ -30,7 +31,7 @@ class Square:
 
 class Minotaur(Square):
     def event(self, game, player, event):
-        if event == "arrive":
+        if isinstance(event, PlayerArrive):
             game.log("Вы попались МИНОТАВРУ. Жуткий конец.")
             die_for_real = player.die(game)
             if die_for_real and 'сокровище' in self.loot:

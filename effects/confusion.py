@@ -1,7 +1,6 @@
 from .effect import ExpiringEffect
-from events import AfterChose, AfterMove
+from events import AfterChoice, AfterMove
 from constants import DIRECTIONS
-
 
 class Confusion(ExpiringEffect):
     INVERSE_DIRECTIONS = {'в': 'н', 'н': 'в', 'л': 'п', 'п': 'л'}
@@ -13,7 +12,7 @@ class Confusion(ExpiringEffect):
         game.log(player, "Стоп, куда это Вы только что сходили?")
 
     def event(self, game, player, event):
-        if isinstance(event, AfterChose):
+        if isinstance(event, AfterChoice):
             if event.action in DIRECTIONS:
                 event.action = self.INVERSE_DIRECTIONS[event.action]
                 return True

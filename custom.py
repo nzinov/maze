@@ -2,7 +2,7 @@ from objects import Object, register_object
 from effects import Effect
 from player import Player
 from constants import DIRECTIONS
-
+from events import PlayerStartTurn, PlayerDie, PlayerWin
 
 class FeelMyPower(Effect):
 
@@ -10,7 +10,7 @@ class FeelMyPower(Effect):
         super(FeelMyPower, self).event(game, player, event)
         if isinstance(player, Geanie):
             return False
-        if event == "start_turn":
+        if isinstance(event, PlayerStartTurn):
             for other in game.players:
                 if (other.position == player.position
                         and isinstance(other, Geanie)
@@ -48,14 +48,14 @@ class Geanie(Player):
             return super().exit(game, False)
 
     def event(self, game, event):
-        if event == "start_turn":
+        if isinstance(event, PlayerStartTurn):
             game.log("СЛУШАЮ И ПОВИНУЮСЬ")
         prevent_default = super(Geanie, self).event(game, event)
         if not prevent_default:
-            if event == "die":
+            if isinstance(event, PlayerDie):
                 self.disappear(game)
                 return True
-            elif event == "win":
+            elif isinstance(event, PlayerWin):
                 game.log("ТЫ ШУТИШЬ, ПОВЕЛИТЕЛЬ! КАК Я МОГУ ПРОЛЕЗТЬ В ЭТО ИГОЛЬНОЕ УШКО?!")
                 return True
 

@@ -1,5 +1,5 @@
 from .square import Square
-
+from events import PlayerArrive, PlayerStartTurn
 
 class PoisonCloud(Square):
 
@@ -10,8 +10,8 @@ class PoisonCloud(Square):
 
     def event(self, game, player, event):
         super().event(game, player, event)
-        if event == "arrive":
+        if isinstance(event, PlayerArrive):
             game.log("Вы вошли в комнату, заполненную ядовито-зеленым газом")
-        if event == "start_turn":
+        if isinstance(event, PlayerStartTurn):
             game.log("*Кхе-кхе*, чертов газ!")
             player.change_health(game, self.damage)

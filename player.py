@@ -1,4 +1,5 @@
 from inventory import Inventory
+from events import PlayerExit, PlayerDie, EffectStart
 
 
 class Player:
@@ -49,7 +50,7 @@ class Player:
         self.inventory = Inventory()
 
     def exit(self, game, recurse=True):
-        self.event(game, "exit")
+        self.event(game, PlayerExit())
         self.drop_loot(game)
         if self.active:
             game.log('Игрок {} покинул игру'.format(self))
@@ -69,14 +70,14 @@ class Player:
         self._health = self.MAX_HEALTH
 
     def die(self, game):
-        if self.event(game, "die"):
+        if self.event(game, PlayerDie()):
             return False
         self._die(game)
         return True
 
     def add_effect(self, game, effect):
         self.effects.append(effect)
-        self.effects[-1].event(game, self, "start")
+        self.effects[-1].event(game, self, EffectStart())
 
     def __str__(self):
         return "@" + self.name

@@ -3,7 +3,7 @@ import random
 from .effect import Effect, ExpiringEffect
 from copy import deepcopy
 from inventory import Inventory
-
+from events import EffectStart, PlayerArrive, PlayerDie, PlayerExit, PlayerWin
 
 def drop_sleep_loot(game, spirit):
     sleep_loot = spirit.body.inventory.get_excess(spirit.inventory)
@@ -27,16 +27,16 @@ class Sleep(Effect):
 
     def event(self, game, player, event):
         super(Sleep, self).event(game, player, event)
-        if event == "start":
+        if isinstance(event, EffectStart):
             player.spirit = deepcopy(player)
             player.sleep = self
             player.spirit.effects.pop()  # remove this effect
             player.spirit.position = self.start_position
             player.spirit.add_effect(game, Dream(self.time, player))
             game.replace_player(player, player.spirit)
-            player.spirit.event(game, "arrive")
+            player.spirit.event(game, PlayerArrive())
             player.active = False
-        elif event == "die":
+        elif isinstance(event, PlayerDie):
             self.expire(game, player)
             return False
 
@@ -63,16 +63,16 @@ class Dream(ExpiringEffect):
 
     def event(self, game, player, event):
         super(Dream, self).event(game, player, event)
-        if event == "start":
+        if isinstance(event, EffectStart):
             player.body = self.body
-        elif event == "exit":
+        elif isinstance(event, PlayerExit):
             drop_sleep_loot(game, player)
             player.inventory = Inventory()
-        elif event == "win":
+        elif isinstance(event, PlayerWin):
             game.log("Какой приятный был сон!")
             self.wake()
             return True
-        elif event == "die":
+        elif isinstance(event, PlayerDie):
             game.log("Кошмар. Ну и приснится же такое!")
             self.wake()
             return True

@@ -1,5 +1,5 @@
 from .square import Square
-
+from events import PlayerArrive
 
 class EffectorSquare(Square):
 
@@ -9,5 +9,5 @@ class EffectorSquare(Square):
 
     def event(self, game, player, event):
         super(EffectorSquare, self).event(game, player, event)
-        if event == "arrive":
+        if isinstance(event, PlayerArrive):
             player.add_effect(game, self.effect_class())

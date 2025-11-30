@@ -1,5 +1,5 @@
 from .square import Square
-
+from events import GameStartRound, PlayerArrive
 
 class River(Square):
 
@@ -9,6 +9,6 @@ class River(Square):
 
     def event(self, game, player, event):
         super(River, self).event(game, player, event)
-        if event == "start_round":
+        if isinstance(event, GameStartRound):
             player.position += self.direction
-            player.event(game, "arrive")
+            player.event(game, PlayerArrive())

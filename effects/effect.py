@@ -1,3 +1,5 @@
+from events import PlayerMove
+
 class Effect:
 
     def __init__(self):
@@ -26,7 +28,7 @@ class ExpiringEffect(Effect):
         pass
 
     def event(self, game, player, event):
-        if event == "move":
+        if isinstance(event, PlayerMove):
             self.time -= 1
             if self.time <= 0:
                 self.expire(game, player)

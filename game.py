@@ -1,7 +1,7 @@
 from constants import DIRECTIONS
 from objects import OBJECTS
 from exceptions import GameEnded
-from events import AfterChose, AfterMove
+from events import AfterChoice, AfterMove, PlayerArrive, PlayerEndTurn, GameStartRound, PlayerStartTurn, PlayerMove, PlayerWin
 
 
 class Subfield:
@@ -25,7 +25,7 @@ class Subfield:
 
     def _move(self, game, player, direction):
         player.position += direction
-        player.event(game, "arrive")
+        player.event(game, PlayerArrive())
 
     def __getitem__(self, index):
         return self.squares[index.x()][index.y()]
@@ -181,7 +181,7 @@ class Game:
         while True:
             if self.player().active:
                 self.player().change_health(self, 1)
-                self.player().event(self, "end_turn")
+                self.player().event(self, PlayerEndTurn())
 
             if self.debug:
                 player_state = self.player().get_state()
@@ -189,19 +189,19 @@ class Game:
             new_round = self._players.rotate()
             if new_round:
                 for player in self._players:
-                    player.event(self, "start_round")
+                    player.event(self, GameStartRound())
                 self.turn_number += 1
                 self.log("Начинается {} ход".format(self.turn_number))
             if self.player().active:
                 break
         self.log("--- {} ---".format(self.player()))
-        self.player().event(self, "start_turn")
+        self.player().event(self, PlayerStartTurn())
 
     def action(self, action):
         done = False
         exit_command = "выйти из игры " + self.player().name.lower()
         action = action.lower()
-        after_choice = AfterChose(action)
+        after_choice = AfterChoice(action)
         if self.player().event(self, after_choice):
             action = after_choice.action
         if action in DIRECTIONS:
@@ -235,7 +235,7 @@ class Game:
                 self.log("Игроков не осталось, игра завершена")
                 raise GameEnded()
         if done:
-            self.player().event(self, "move")
+            self.player().event(self, PlayerMove())
             self.next_move()
 
     @property
@@ -258,7 +258,7 @@ class Game:
             print("replace player", *base.get_state(), "with", *replacement.get_state())
 
     def win(self, player):
-        if player.event(self, "win"):
+        if player.event(self, PlayerWin()):
             return
         self.log("Игра завершена")
         raise GameEnded()

@@ -1,5 +1,5 @@
 from .effect import Effect
-
+from events import PlayerStartTurn, EffectStart
 
 class Stun(Effect):
 
@@ -9,13 +9,13 @@ class Stun(Effect):
         assert damage < 0
 
     def event(self, game, player, event):
-        if event == "start_turn":
+        if isinstance(event, PlayerStartTurn):
             game.log("Вы пропускаете ход")
             self.time -= 1
             if self.time == 0:
                 self._expire(player)
             game.next_move()
-        elif event == "start":
+        elif isinstance(event, EffectStart):
             player.change_health(game, self.damage)
         else:
             super(Stun, self).event(game, player, event)

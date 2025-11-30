@@ -1,6 +1,6 @@
 from .common_object import Object, register_object
 from constants import DIRECTIONS
-
+from events import PlayerArrive
 
 @register_object("дубина")
 class Club(Object):
@@ -17,7 +17,7 @@ class Club(Object):
                     hit = True
                     if game.field.can_move(other.position, direction):
                         other.position += direction
-                        other.event(game, "arrive")
+                        other.event(game, PlayerArrive())
                         other.change_health(game, -20)
             if not hit:
                 game.log("Дубина со свистом рассекла воздух")

@@ -1,5 +1,5 @@
 from .square import Square
-
+from events import PlayerArrive
 
 class Armory(Square):
     obj = "патрон"
@@ -7,7 +7,7 @@ class Armory(Square):
 
     def event(self, game, player, event):
         super(Armory, self).event(game, player, event)
-        if event == "arrive":
+        if isinstance(event, PlayerArrive):
             while player.inventory.count(self.obj) < self.count:
                 player.inventory.add(self.obj)
             game.log(

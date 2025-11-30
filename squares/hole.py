@@ -1,5 +1,5 @@
 from .square import Square
-
+from events import PlayerArrive
 
 class Hole(Square):
 
@@ -9,6 +9,6 @@ class Hole(Square):
 
     def event(self, game, player, event):
         super(Hole, self).event(game, player, event)
-        if event == "arrive":
+        if isinstance(event, PlayerArrive):
             game.log(player, "Вы попали в ДЫРУ.")
             player.position = self.target
