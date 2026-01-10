@@ -1,7 +1,9 @@
 from constants import DIRECTIONS
 from objects import OBJECTS
 from exceptions import GameEnded
-from events import AfterChoice, AfterMove, PlayerArrive, PlayerEndTurn, GameStartRound, PlayerStartTurn, PlayerMove, PlayerWin
+from events import (
+    AfterChoice, AfterMove, PlayerArrive, PlayerEndTurn, GameStartRound, PlayerStartTurn, PlayerMove, PlayerWin,
+)
 
 
 class Subfield:
@@ -191,6 +193,8 @@ class Game:
                 for player in self._players:
                     player.event(self, GameStartRound())
                 self.turn_number += 1
+                if self.debug:
+                    print('start {} turn'.format(self.turn_number))
                 self.log("Начинается {} ход".format(self.turn_number))
             if self.player().active:
                 break

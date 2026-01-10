@@ -3,7 +3,15 @@ class Event:
 
 
 class AfterChoice(Event):
-    """Event fired after player makes a choice"""
+    """Event fired after player makes an action choice"""
+    name = 'after_choice'
+
+    def __init__(self, action):
+        self.action = action
+
+
+class AfterItemChoice(Event):
+    """Event fired after player choses an action with item"""
     name = 'after_choice'
 
     def __init__(self, action):

@@ -1,4 +1,5 @@
 from objects import OBJECTS
+from events import AfterItemChoice
 
 
 class Inventory:
@@ -54,6 +55,9 @@ class Inventory:
             return False
         if obj not in self.objects:
             raise KeyError()
+        after_choice = AfterItemChoice(action)
+        if player.event(game, after_choice):
+            action = after_choice.action
         is_used = OBJECTS[obj].action(game, player, action)
         if is_used:
             self.remove(obj)
