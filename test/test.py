@@ -42,6 +42,7 @@ class Controller:
                 if not action:
                     break
                 if action[:3] != ">>>":
+                    print('turn: {}'.format(self.game.turn_number))
                     print("Expected action got {}".format(action))
                     return False
                 action = action[3:]
