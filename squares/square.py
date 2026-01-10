@@ -23,7 +23,7 @@ class Square:
                 self.loot = Inventory()
         message = self.messages.get(event.name)
         if message:
-            game.log(message)
+            game.log(player, message)
 
     def __str__(self):
         return type(self).__name__
