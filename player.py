@@ -9,6 +9,8 @@ class Player:
         self.start_position = position
         self.position = position
         self.effects = []
+        self.remove_effect_lock = False
+        self.effects_to_remove = []
         self.minions = []
         self.inventory = Inventory()
         self.name = name
@@ -38,12 +40,24 @@ class Player:
 
         """
         prevent_default = False
+        self.remove_effect_lock = True
         for effect in self.effects:
             if effect.event(game, self, event):
                 prevent_default = True
+        for effect in self.effects_to_remove:
+            self.effects.remove(effect)
+        self.effects_to_remove = []
+        self.remove_effect_lock = False
         if game.field[self.position].event(game, self, event):
             prevent_default = True
         return prevent_default
+
+    def remove_effect(self, effect):
+        assert effect in self.effects
+        if self.remove_effect_lock:
+            self.effects_to_remove.append(effect)
+        else:
+            self.effects.remove(effect)
 
     def drop_loot(self, game):
         game.field[self.position].loot.update(self.inventory)

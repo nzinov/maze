@@ -1,5 +1,6 @@
 from events import PlayerMove
 
+
 class Effect:
 
     def __init__(self):
@@ -9,10 +10,7 @@ class Effect:
         pass
 
     def _expire(self, player):
-        try:
-            player.effects.remove(self)
-        except ValueError:
-            pass
+        player.remove_effect(self)
 
     def __repr__(self):
         return str(self)
