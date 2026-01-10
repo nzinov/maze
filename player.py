@@ -1,9 +1,10 @@
 from inventory import Inventory
 from events import PlayerExit, PlayerDie, EffectStart
+from objects import Bullet
 
 
 class Player:
-    MAX_HEALTH = 100
+    MAX_HEALTH = int(Bullet.DAMAGE * 2.5)
 
     def __init__(self, name, position, pid):
         self.start_position = position
@@ -114,3 +115,13 @@ class Player:
             game.log(str(self) + ": " + health_delta_str)
         if self._health <= 0:
             self.die(game)
+
+    def log_health(self, game):
+        if self.health < game.WALL_DAMAGE * 2:
+            game.log(self, "Совсем плохи дела...")
+        elif self.health < Bullet.DAMAGE:
+            game.log(self, "Плохи дела")
+        elif self.health < Bullet.DAMAGE * 2:
+            game.log(self, "Ранен, но не смертельно")
+        else:
+            game.log(self, "Все в порядке")

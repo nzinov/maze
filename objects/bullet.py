@@ -5,8 +5,10 @@ from .common_object import Object, register_object
 @register_object("патрон")
 class Bullet(Object):
     "в/н/л/п - выстрелить в заданую сторону"
-    @staticmethod
-    def action(game, player, action):
+    DAMAGE = 40
+
+    @classmethod
+    def action(cls, game, player, action):
         if action in DIRECTIONS:
             position = player.position
             direction = DIRECTIONS[action]
@@ -16,7 +18,7 @@ class Bullet(Object):
                     if other.position == position and player.name != other.name:
                         hit = True
                         game.log(player, "Вы попали в игрока {}".format(other.name))
-                        other.change_health(game, -40)
+                        other.change_health(game, -cls.DAMAGE)
                 if hit:
                     return True
                 if game.field.can_move(position, direction):

@@ -66,7 +66,7 @@ class Field:
         else:
             game.log(game.player(), "Невозможно сходить {}. Там стена :no_entry:".format(
                 NAME[direction]))
-            game.player().change_health(game, -5)
+            game.player().change_health(game, -game.WALL_DAMAGE)
 
     def destroy_wall(self, position, direction):
         subfield = self.fields[position.field]
@@ -160,6 +160,7 @@ class Players:
 
 
 class Game:
+    WALL_DAMAGE = 5
 
     def __init__(self, controller, field, players, debug=True):
         self.controller = controller
@@ -225,6 +226,7 @@ class Game:
 инвентарь - посмотреть инвентарь
 в, н, л, п - сходить в заданную сторону
 помощь - эта справка
+здоровье - узнать как Вы себя чувствуете
 {} - покинуть игру, аккуратнее действие нельзя отменить
 помощь <предмет> - справка по предмету
 <предмет> <действие> - использовать специальное действие предмета
@@ -238,6 +240,8 @@ class Game:
             if not self._players:
                 self.log("Игроков не осталось, игра завершена")
                 raise GameEnded()
+        elif action == 'здоровье':
+            self.player().log_health(self)
         if done:
             self.player().event(self, PlayerMove())
             self.next_move()
