@@ -23,7 +23,7 @@ class Compass(Object):
     def action(cls, game, player, action):
         if action == 'проверить':
             if "сокровище" in player.inventory:
-                game.log("Компас указывает на вашу сумку. А, ну да.")
+                game.log(player, "Компас указывает на вашу сумку. А, ну да.")
                 return False
             treasure_position = None
             for other in game.players:
@@ -36,12 +36,12 @@ class Compass(Object):
                         treasure_position = Position(player.position.field, x, y)
                         break
             if treasure_position is None:
-                game.log("Стрелка крутится по кругу, странно...")
+                game.log(player, "Стрелка крутится по кругу, странно...")
                 return False
             else:
                 direction = cls.get_direction(player, treasure_position)
                 if direction:
-                    game.log("Стрелка указывает на " + direction)
+                    game.log(player, "Стрелка указывает на " + direction)
                 else:
-                    game.log("Оно совсем рядом, прямо перед вами!")
+                    game.log(player, "Оно совсем рядом, прямо перед вами!")
                 return False
