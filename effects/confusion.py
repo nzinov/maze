@@ -8,6 +8,7 @@ class Confusion(ExpiringEffect):
 
     def __init__(self, time):
         self.time = time
+        self.initial_time = time
         self.move_count = 0
         self.item_count = 0
 
@@ -31,8 +32,9 @@ class Confusion(ExpiringEffect):
                 event.action = self.INVERSE_DIRECTIONS[event.action]
                 return True
         elif isinstance(event, AfterMove):
-            event.direction = tuple(d * -1 for d in event.direction)
-            return True
+            if self.initial_time != self.time:
+                event.direction = tuple(d * -1 for d in event.direction)
+                return True
         else:
             return super().event(game, player, event)
 
