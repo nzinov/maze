@@ -190,12 +190,12 @@ class Game:
                 print(self.field[self.player().position], *player_state)
             new_round = self._players.rotate()
             if new_round:
-                for player in self._players:
-                    player.event(self, GameStartRound())
                 self.turn_number += 1
                 if self.debug:
                     print('start {} turn'.format(self.turn_number))
                 self.log("Начинается {} ход".format(self.turn_number))
+                for player in self._players:
+                    player.event(self, GameStartRound())
             if self.player().active:
                 break
         self.log("--- {} ---".format(self.player()))
