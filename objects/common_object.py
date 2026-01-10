@@ -25,9 +25,9 @@ class LuStaff(Object):
     def action(game, player, action):
         if action == "махнуть":
             if not hasattr(player, 'cock'):
-                game.log("Вы взмахнули посохом - и стены лабиринта огласил дурацкий смех.")
+                game.log(player, "Вы взмахнули посохом - и стены лабиринта огласил дурацкий смех.")
                 player.name = "{} - петух!".format(player.name)
                 player.cock = True
             else:
-                game.log('"Петух! Петух!" - раздается голос из ниоткуда, и опять звучит странный смех.')
+                game.log(player, '"Петух! Петух!" - раздается голос из ниоткуда, и опять звучит странный смех.')
             return False

@@ -13,13 +13,13 @@ class Railgun(Object):
             while True:
                 for other in game.players:
                     if other.position == position and player.name != other.name:
-                        game.log("Вы попали в игрока {}".format(other.name))
+                        game.log(player, "Вы попали в игрока {}".format(other.name))
                         other.die(game)
                 if not game.field.is_legal(position + direction):
-                    game.log("Вот это да, эту стену даже рейлган не берет!")
+                    game.log(player, "Вот это да, эту стену даже рейлган не берет!")
                     return True
                 elif game.field.can_move(position, direction):
                     position += direction
                 else:
-                    game.log("Вay, стены как не бывало!")
+                    game.log(player, "Вay, стены как не бывало!")
                     game.field.destroy_wall(position, direction)

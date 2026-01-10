@@ -15,7 +15,7 @@ class Bullet(Object):
                 for other in game.players:
                     if other.position == position and player.name != other.name:
                         hit = True
-                        game.log("Вы попали в игрока {}".format(other.name))
+                        game.log(player, "Вы попали в игрока {}".format(other.name))
                         other.change_health(game, -40)
                 if hit:
                     return True

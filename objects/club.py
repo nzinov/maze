@@ -2,6 +2,7 @@ from .common_object import Object, register_object
 from constants import DIRECTIONS
 from events import PlayerArrive
 
+
 @register_object("дубина")
 class Club(Object):
     "Такой суковатой дубиной кого угодно с места сшибешь. в/н/л/п - ударить в заданую сторону"
@@ -13,7 +14,7 @@ class Club(Object):
             for other in game.players:
                 if player.name != other.name and (other.position == player.position
                                                   or other.position == player.position + direction):
-                    game.log("Вы попали игроку {} прямо по голове".format(other.name))
+                    game.log(player, "Вы попали игроку {} прямо по голове".format(other.name))
                     hit = True
                     if game.field.can_move(other.position, direction):
                         other.position += direction
