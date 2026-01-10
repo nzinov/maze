@@ -18,7 +18,7 @@ class Confusion(ExpiringEffect):
             if self.move_count > 0:
                 mes += 'Куда это я ходил последние раунды? '
             if self.item_count > 0:
-                mes += 'И в каком направлении предметы применял? '
+                mes += 'В каком это направлении я предметы применял? '
             mes += 'Вроде хотел в другую сторону..."'
             game.log(player, mes)
 
