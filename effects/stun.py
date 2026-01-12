@@ -1,24 +1,23 @@
-from .effect import Effect
-from events import PlayerStartTurn, EffectStart
+from .effect import ExpiringEffect
+from events import PlayerStartTurn, EffectStart, PlayerMove
 
-class Stun(Effect):
+
+class Stun(ExpiringEffect):
 
     def __init__(self, time, damage=-10):
-        self.time = time
+        self.time = time + 1
         self.damage = damage
         assert damage < 0
 
     def event(self, game, player, event):
         if isinstance(event, PlayerStartTurn):
-            game.log("Вы пропускаете ход")
-            self.time -= 1
-            if self.time == 0:
-                self._expire(player)
+            game.log(player, "Вы пропускаете ход")
+            player.event(game, PlayerMove())
             game.next_move()
         elif isinstance(event, EffectStart):
             player.change_health(game, self.damage)
         else:
-            super(Stun, self).event(game, player, event)
+            super().event(game, player, event)
 
     def __str__(self):
         return 'Stun({})'.format(self.time)
